@@ -45,5 +45,9 @@ class InputMgr():
                 elif event.key == pygame.K_d:
                     self.engine.entityMgr.player.moving_right = False
 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.engine.entityMgr.player.fire(pygame.mouse.get_pos())
+
     def shutdown(self):
         pass

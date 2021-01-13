@@ -28,9 +28,15 @@ class EntityMgr():
         platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (1024-400, 300))
         self.platforms.append(platform)
 
+        self.bullets = []
 
     def tick(self, dt):
         self.player.tick(dt)
+
+        for bullet in self.bullets:
+            bullet.tick(dt)
+
+        self.bullets[:] = [bullet for bullet in self.bullets if bullet.still_alive()]
 
 
     def shutdown(self):

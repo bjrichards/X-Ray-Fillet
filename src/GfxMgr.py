@@ -42,6 +42,9 @@ class GfxMgr():
         for platform in self.engine.entityMgr.platforms:
             platform.draw()
 
+        for bullet in self.engine.entityMgr.bullets:
+            bullet.draw()
+
         self.engine.entityMgr.player.draw()
         self.screen.blit(self.window, self.window_pos)
         self.screen.blit(self.uiScreen, (0,0))
@@ -62,7 +65,13 @@ class GfxMgr():
         result = self.font.render("Is Grounded: " + col, 1, pygame.Color("coral"))
         return result
 
-    def update_double_jump(self):
-        db = str(self.engine.entityMgr.player.double_jumped)
-        result = self.font.render("Double Jumped: " + db, 1, pygame.Color("coral"))
+    def update_show_jumps(self):
+        jumps = str(self.engine.entityMgr.player.jump + 2 % 2)
+        result = self.font.render("Jumps Left: " + jumps, 1, pygame.Color("coral"))
+        return result
+
+
+    def update_bullet_count(self):
+        bc = str(len(self.engine.entityMgr.bullets))
+        result = self.font.render("Bullet Count: " + bc, 1, pygame.Color("coral"))
         return result

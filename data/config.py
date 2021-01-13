@@ -4,13 +4,20 @@ class baseConfig():
 
     fps = 80
 
+    # UI Debugging Options
     bounding_boxes = True
     show_fps = True
+    show_is_grounded = True
     show_jumps_left = True
+    show_bullet_count = True
 
+
+    # Gameplay Configurations
     gravity_on = True
     gravity = -.005
 
+    player_bullet_speed = 0.8
+    player_bullet_lifetime = 5
 
 class developmentConfig(baseConfig):
     window_name = "DEV X-Ray Fillet Engine"

@@ -5,6 +5,7 @@
 
 # Includes
 import pygame
+import math
 from .Aspect import Physics2D
 
 # Class
@@ -88,6 +89,8 @@ class Player(Entity):
         self.moving_left = False
         self.moving_right = False
 
+        self.bullet_speed = self.engine.config.player_bullet_speed
+
     def tick(self, dt):
         for aspect in self.aspects:
             aspect.tick(dt)
@@ -168,6 +171,17 @@ class Player(Entity):
         
         self.velocity = (velx, vely)
 
+
+    def fire(self, pos_to_fire_toward):
+        distance = [pos_to_fire_toward[0] - self.position[0], pos_to_fire_toward[1] - self.position[1]]
+        normalized = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        direction = [distance[0] / normalized, distance[1] / normalized]
+
+        velocity = (direction[0] * self.bullet_speed, direction[1] * self.bullet_speed)
+
+        bullet = Bullet(self.engine, None, (5, 5), 0, self.display_surface, (self.position[0], self.position[1]), velocity)
+        self.engine.entityMgr.bullets.append(bullet)
+
     
 class Platform(Entity):
     def __init__(self, engine, image_file_name, size, identity, display, position):
@@ -182,3 +196,36 @@ class Platform(Entity):
     def draw(self):
         if self.engine.config.bounding_boxes:
                 pygame.draw.rect(self.display_surface, self.color, self.rect)
+
+
+class Bullet(Entity):
+    def __init__(self, engine, image_file_name, size, identity, display, position, velocity):
+        Entity.__init__(self, engine, image_file_name, size, identity, display)
+
+        self.color = (255, 0, 0)
+        self.position = position
+        self.velocity = velocity
+        self.is_alive = True
+        self.time_alive = 0
+        self.lifetime_max = self.engine.config.player_bullet_lifetime
+    
+
+    def tick(self, dt):
+        posx = self.position[0] + self.velocity[0] * dt
+        posy = self.position[1] + self.velocity[1] * dt
+        self.position = (posx, posy)
+        self.time_alive = self.time_alive + self.engine.clock.get_time()
+        self.is_alive = self.still_alive()
+        
+
+    def draw(self):
+        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] + self.size[0] / 2, self.position[1] + self.size[1] / 2), self.size[0])
+
+
+    def still_alive(self):
+        result = False
+
+        if self.time_alive / 1000 < self.lifetime_max:
+            result = True
+        
+        return result
