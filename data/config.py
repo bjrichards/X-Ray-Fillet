@@ -5,20 +5,20 @@ class baseConfig():
     fps = 80
 
     bounding_boxes = True
-
     show_fps = True
+    show_jumps_left = True
 
     gravity_on = True
     gravity = -.005
 
 
 class developmentConfig(baseConfig):
-    window_name = "DEV Base Engine"
+    window_name = "DEV X-Ray Fillet Engine"
 
 
 class uatConfig(baseConfig):
-    window_name = "UAT Base Engine"
+    window_name = "UAT X-Ray Fillet Engine"
 
 
 class productionConfig(baseConfig):
-    window_name = "PROD Base Engine"
+    window_name = "PROD X-Ray Fillet Engine"
