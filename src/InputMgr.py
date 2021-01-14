@@ -38,12 +38,16 @@ class InputMgr():
                 elif event.key == pygame.K_d:
                     self.engine.entityMgr.player.moving_left = False
                     self.engine.entityMgr.player.moving_right = True
+                elif event.key == pygame.K_s:
+                    self.engine.entityMgr.player.down_button = True
 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     self.engine.entityMgr.player.moving_left = False
                 elif event.key == pygame.K_d:
                     self.engine.entityMgr.player.moving_right = False
+                elif event.key == pygame.K_s:
+                    self.engine.entityMgr.player.down_button = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:

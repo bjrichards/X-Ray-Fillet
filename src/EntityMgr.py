@@ -22,6 +22,7 @@ class EntityMgr():
         self.player.initialize()
 
         self.platforms = []
+        self.furthest_object = 0
 
         # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (0, 600))
         
@@ -34,6 +35,9 @@ class EntityMgr():
         for platform in self.engine.gameMgr.platforms:
             newPlatform = Platform(self.engine, None, (platform[1], 30), 0, self.engine.gfxMgr.window, (platform[0], platform[2]))
             self.platforms.append(newPlatform)
+            if newPlatform.position[0] > self.furthest_object:
+                self.furthest_object = newPlatform.position[0]
+
 
     def tick(self, dt):
         self.player.tick(dt)

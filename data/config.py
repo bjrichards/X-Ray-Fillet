@@ -10,6 +10,7 @@ class baseConfig():
     show_is_grounded = True
     show_jumps_left = True
     show_bullet_count = True
+    show_platforms_rendered = True
 
 
     # Gameplay Configurations

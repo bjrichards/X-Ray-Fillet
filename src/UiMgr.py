@@ -18,6 +18,7 @@ class UiMgr():
         self.show_grounded = None
         self.show_jumps_left = None
         self.show_bullet_count = None
+        self.show_platforms_rendered = None
 
     
     def initialize(self):
@@ -26,6 +27,7 @@ class UiMgr():
         self.show_grounded = self.engine.config.show_is_grounded
         self.show_jumps_left = self.engine.config.show_jumps_left
         self.show_bullet_count = self.engine.config.show_bullet_count
+        self.show_platforms_rendered = self.engine.config.show_platforms_rendered
 
 
     def tick(self, dt):
@@ -37,7 +39,8 @@ class UiMgr():
             self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_show_jumps(), (400, 0))
         if self.show_bullet_count:
             self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_bullet_count(), (600, 0))
-
+        if self.show_platforms_rendered:
+            self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_platforms_rendered(), (10, 50))
 
     def shutdown(self):
         pass

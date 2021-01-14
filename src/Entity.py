@@ -88,6 +88,7 @@ class Player(Entity):
 
         self.moving_left = False
         self.moving_right = False
+        self.down_button = False
 
         self.bullet_speed = self.engine.config.player_bullet_speed
 
@@ -102,13 +103,13 @@ class Player(Entity):
         self.check_collisions()
 
     def draw(self):
-        if self.is_on_screen():
-            self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
-            # self.display_surface.blit(self.display_surface, self.rect)
+        scroll = self.engine.gfxMgr.scroll
+        self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
+        # self.display_surface.blit(self.display_surface, self.rect)
 
-            if self.engine.config.bounding_boxes:
-                pygame.draw.rect(self.display_surface, self.color, self.rect, 1)
-                pygame.draw.circle(self.display_surface, self.color, (self.position[0] + self.size[0] / 2, self.position[1] + self.size[1] / 2), 20, 1)
+        if self.engine.config.bounding_boxes:
+            pygame.draw.rect(self.display_surface, self.color, self.rect, 1)
+            pygame.draw.circle(self.display_surface, self.color, (self.position[0] - scroll[0] + self.size[0] / 2, self.position[1] - scroll[1] + self.size[1] / 2), 20, 1)
 
 
     def check_collisions(self):
@@ -137,16 +138,16 @@ class Player(Entity):
             self.position = (self.position[0], 0)
             self.velocity = (self.velocity[0], 0)
 
-        if self.position[0] <= 0:
-            self.position = (0, self.position[1])
-        if self.position[0] + self.size[0] > self.engine.config.window_size[0]:
-            self.position = (self.engine.config.window_size[0] - self.size[0], self.position[1])
+        # if self.position[0] <= 0:
+        #     self.position = (0, self.position[1])
+        # if self.position[0] + self.size[0] > self.engine.config.window_size[0]:
+        #     self.position = (self.engine.config.window_size[0] - self.size[0], self.position[1])
         return collision
 
 
     def check_platform_collisions(self):
         collision = False
-        if self.velocity[1] >= 0:
+        if self.velocity[1] >= 0 and not self.down_button:
             for platform in self.engine.entityMgr.platforms:
                 if self.position[0] + self.size[0]  >= platform.position[0] and self.position[0] <= platform.position[0] + platform.size[0]:
                     if self.position[1] + self.size[1] >= platform.position[1] and self.position[1] + self.size[1] <= platform.position[1] + platform.size[1]:
@@ -173,7 +174,7 @@ class Player(Entity):
 
 
     def fire(self, pos_to_fire_toward):
-        distance = [pos_to_fire_toward[0] - self.position[0], pos_to_fire_toward[1] - self.position[1]]
+        distance = [pos_to_fire_toward[0] + self.engine.gfxMgr.scroll[0] - self.position[0], pos_to_fire_toward[1] - self.position[1]]
         normalized = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
         direction = [distance[0] / normalized, distance[1] / normalized]
 
@@ -192,10 +193,21 @@ class Platform(Entity):
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
         
 
-
     def draw(self):
+        if self.in_camera():
+            scroll = self.engine.gfxMgr.scroll
+            self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
+            pygame.draw.rect(self.display_surface, self.color, self.rect)
+            self.engine.gfxMgr.platforms_rendered += 1
+
+
+    def in_camera(self):
+        result = True
         
-        pygame.draw.rect(self.display_surface, self.color, self.rect)
+        if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
+            result = False
+
+        return result
 
 
 class Bullet(Entity):
@@ -219,7 +231,7 @@ class Bullet(Entity):
         
 
     def draw(self):
-        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] + self.size[0] / 2, self.position[1] + self.size[1] / 2), self.size[0])
+        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] + self.size[1] / 2), self.size[0])
 
 
     def still_alive(self):

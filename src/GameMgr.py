@@ -19,6 +19,7 @@ class GameMgr():
     def initialize(self):
         self.create_active_map()
         self.engine.entityMgr.load_map()
+        self.engine.gfxMgr.scroll[0] = self.engine.entityMgr.furthest_object 
 
 
     def tick(self, dt):
@@ -37,6 +38,9 @@ class GameMgr():
         start = 0
         active = False
 
+        self.f = open("data\map.txt", 'r')
+        print(self.f.read())
+        self.f.close()
         self.f = open("data\map.txt", 'r')
         while 1:
             char = self.f.read(1)
@@ -64,6 +68,6 @@ class GameMgr():
                     if active == True:
                         platform = (start, width * (1024 / 12), row * (768 / 9))
                         self.platforms.append(platform)
+                    width = 0
                     active = False
                 col = col + 1
-        print(self.platforms)

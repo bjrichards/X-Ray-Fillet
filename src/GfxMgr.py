@@ -16,6 +16,12 @@ class GfxMgr():
         self.font = None
 
         self.window_pos = (0,0)
+        
+        self.scroll = [0,0]
+
+        self.scroll_locked = False
+
+        self.platforms_rendered = 0
 
     
     def initialize(self, name, size):
@@ -31,6 +37,14 @@ class GfxMgr():
 
     def tick(self, dt):
 
+        if self.scroll_locked == False:
+            self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 80    
+            # print(abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]))
+            if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 40:
+                self.scroll_locked = True
+        else:
+            self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 20
+
         self.screen.fill((0,0,0,0))
         self.window.fill((0,0,0,0))
         self.uiScreen.fill((0,0,0,0))
@@ -39,6 +53,7 @@ class GfxMgr():
         
         self.engine.uiMgr.tick(dt)
 
+        self.platforms_rendered = 0
         for platform in self.engine.entityMgr.platforms:
             platform.draw()
 
@@ -74,4 +89,10 @@ class GfxMgr():
     def update_bullet_count(self):
         bc = str(len(self.engine.entityMgr.bullets))
         result = self.font.render("Bullet Count: " + bc, 1, pygame.Color("coral"))
+        return result
+
+
+    def update_platforms_rendered(self):
+        pr = str(self.platforms_rendered)
+        result = self.font.render("Platforms Rendered: " + pr, 1, pygame.Color("coral"))
         return result
