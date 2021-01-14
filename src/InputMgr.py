@@ -30,13 +30,12 @@ class InputMgr():
                 if event.key == pygame.K_ESCAPE:
                     self.engine.keepRunning = False
 
-                elif event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_SPACE or event.key == pygame.K_w:
                     self.engine.entityMgr.player.jump_()
 
                 elif event.key == pygame.K_a:
                     self.engine.entityMgr.player.moving_left = True
                 elif event.key == pygame.K_d:
-                    self.engine.entityMgr.player.moving_left = False
                     self.engine.entityMgr.player.moving_right = True
                 elif event.key == pygame.K_s:
                     self.engine.entityMgr.player.down_button = True

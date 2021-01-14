@@ -81,7 +81,7 @@ class GfxMgr():
         return result
 
     def update_show_jumps(self):
-        jumps = str(self.engine.entityMgr.player.jump + 2 % 2)
+        jumps = str(2 - self.engine.entityMgr.player.jump)
         result = self.font.render("Jumps Left: " + jumps, 1, pygame.Color("coral"))
         return result
 
