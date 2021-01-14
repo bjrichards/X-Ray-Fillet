@@ -23,12 +23,17 @@ class EntityMgr():
 
         self.platforms = []
 
-        platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (0, 600))
-        self.platforms.append(platform)
-        platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (1024-400, 300))
-        self.platforms.append(platform)
+        # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (0, 600))
+        
+        # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (1024-400, 300))
+        # self.platforms.append(platform)
 
         self.bullets = []
+
+    def load_map(self):
+        for platform in self.engine.gameMgr.platforms:
+            newPlatform = Platform(self.engine, None, (platform[1], 30), 0, self.engine.gfxMgr.window, (platform[0], platform[2]))
+            self.platforms.append(newPlatform)
 
     def tick(self, dt):
         self.player.tick(dt)

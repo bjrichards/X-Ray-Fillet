@@ -35,6 +35,7 @@ class Engine():
         self.gfxMgr.initialize(self.config.window_name, self.config.window_size)
         self.uiMgr.initialize()
         self.entityMgr.initialize()
+
         self.gameMgr.initialize()
         self.inputMgr.initialize()
 

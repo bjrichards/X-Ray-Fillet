@@ -194,8 +194,8 @@ class Platform(Entity):
 
 
     def draw(self):
-        if self.engine.config.bounding_boxes:
-                pygame.draw.rect(self.display_surface, self.color, self.rect)
+        
+        pygame.draw.rect(self.display_surface, self.color, self.rect)
 
 
 class Bullet(Entity):
