@@ -5,7 +5,7 @@
 
 # Includes
 import pygame
-from .Entity import Player, Platform
+from .Entity import Player, Platform, Enemy
 
 
 # Class
@@ -24,6 +24,7 @@ class EntityMgr():
         self.platforms = []
         self.furthest_object = 0
 
+        self.enemies = []
         # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (0, 600))
         
         # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (1024-400, 300))
@@ -38,14 +39,22 @@ class EntityMgr():
             if newPlatform.position[0] > self.furthest_object:
                 self.furthest_object = newPlatform.position[0]
 
+        for enemy in self.engine.gameMgr.enemies:
+            newEnemy = Enemy(self.engine, None, (30, 60), len(self.enemies), self.engine.gfxMgr.window)
+            newEnemy.position = (enemy[0], enemy[1])
+            self.enemies.append(newEnemy)
 
     def tick(self, dt):
-        self.player.tick(dt)
+        if self.engine.gameMgr.game_status == 'IN_GAME':
+            self.player.tick(dt)
 
-        for bullet in self.bullets:
-            bullet.tick(dt)
+            for enemy in self.enemies:
+                enemy.tick(dt)
 
-        self.bullets[:] = [bullet for bullet in self.bullets if bullet.still_alive()]
+            for bullet in self.bullets:
+                bullet.tick(dt)
+
+            self.bullets[:] = [bullet for bullet in self.bullets if bullet.still_alive() and not bullet.check_collision()]
 
 
     def shutdown(self):

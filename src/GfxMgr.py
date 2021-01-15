@@ -22,6 +22,7 @@ class GfxMgr():
         self.scroll_locked = False
 
         self.platforms_rendered = 0
+        self.enemies_rendered = 0
 
     
     def initialize(self, name, size):
@@ -36,31 +37,43 @@ class GfxMgr():
 
 
     def tick(self, dt):
-
-        if self.scroll_locked == False:
-            self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 80    
-            # print(abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]))
-            if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 40:
-                self.scroll_locked = True
-        else:
-            self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 20
-
+        
         self.screen.fill((0,0,0,0))
         self.window.fill((0,0,0,0))
         self.uiScreen.fill((0,0,0,0))
 
-        self.engine.entityMgr.player.draw()
-        
+        if self.engine.gameMgr.game_status == 'IN_GAME':
+            if self.scroll_locked == False:
+                self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 80    
+                # print(abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]))
+                if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 40:
+                    self.scroll_locked = True
+                # self.scroll[0] = self.engine.entityMgr.player.position[0]
+                # self.scroll_locked = True
+            else:
+                self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 20
+
+            
+
+            self.engine.entityMgr.player.draw()
+            
+            
+
+            self.platforms_rendered = 0
+            for platform in self.engine.entityMgr.platforms:
+                platform.draw()
+
+            self.enemies_rendered = 0
+            for enemy in self.engine.entityMgr.enemies:
+                enemy.draw()
+
+            for bullet in self.engine.entityMgr.bullets:
+                bullet.draw()
+
+            self.engine.entityMgr.player.draw()
+
         self.engine.uiMgr.tick(dt)
 
-        self.platforms_rendered = 0
-        for platform in self.engine.entityMgr.platforms:
-            platform.draw()
-
-        for bullet in self.engine.entityMgr.bullets:
-            bullet.draw()
-
-        self.engine.entityMgr.player.draw()
         self.screen.blit(self.window, self.window_pos)
         self.screen.blit(self.uiScreen, (0,0))
 
@@ -95,4 +108,16 @@ class GfxMgr():
     def update_platforms_rendered(self):
         pr = str(self.platforms_rendered)
         result = self.font.render("Platforms Rendered: " + pr, 1, pygame.Color("coral"))
+        return result
+
+
+    def update_enemy_count(self):
+        pr = str(len(self.engine.entityMgr.enemies))
+        result = self.font.render("Enemy Count: " + pr, 1, pygame.Color("coral"))
+        return result
+
+
+    def update_enemy_rendered_count(self):
+        pr = str(self.enemies_rendered)
+        result = self.font.render("Enemies Rendered: " + pr, 1, pygame.Color("coral"))
         return result

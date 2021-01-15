@@ -30,6 +30,7 @@ class Engine():
 
         self.clock = pygame.time.Clock()
 
+        self.gravity = 0
 
     def initialize(self):
         self.gfxMgr.initialize(self.config.window_name, self.config.window_size)

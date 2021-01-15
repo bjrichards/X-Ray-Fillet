@@ -80,7 +80,7 @@ class Player(Entity):
 
         self.is_grounded = False
 
-        self.max_velocity = (1, 1.5)
+        self.max_velocity = (0.5, 1.5)
 
         self.single_jumped = False
         self.double_jumped = False
@@ -240,4 +240,172 @@ class Bullet(Entity):
         if self.time_alive / 1000 < self.lifetime_max:
             result = True
         
+        return result
+
+    
+    def check_collision(self):
+        index = 0
+
+        cx = self.position[0] + self.size[0] / 2
+        cy = self.position[1] + self.size[1] / 2
+        r = self.size[0]
+
+        for enemy in self.engine.entityMgr.enemies:
+            rx = enemy.position[0]
+            ry = enemy.position[1]
+            rw = enemy.size[0]
+            rh = enemy.size[1]
+
+            collision = False
+            
+            testx = cx
+            testy = cy
+
+            if cx < rx:
+                testx = rx
+            elif cx > rx + rw:
+                testx = rx + rw
+            if cy < ry:
+                testy = ry
+            elif cy > ry + rh:
+                testy = ry + rh
+
+            distx = cx - testx
+            disty = cy - testy
+            distance = math.sqrt((distx * distx) + (disty * disty))
+
+            if distance <= r:
+                collision = True
+
+            if collision == True:
+                self.engine.entityMgr.enemies.pop(index)
+                return True
+
+            index = index + 1
+
+
+class Enemy (Entity):
+    def __init__(self, engine, image_file_name, size, identity, display):
+        Entity.__init__(self, engine, image_file_name, size, identity, display)
+        
+        self.entity_type = "Enemy"
+        
+        self.color = (255, 0, 0)
+        self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
+    
+        self.aspects.append(Physics2D(self))
+
+        self.is_grounded = False
+
+        self.max_velocity = (0.3, 1.5)
+
+        self.single_jumped = False
+        self.double_jumped = False
+        self.jump = 0
+
+        self.moving_left = False
+        self.moving_right = False
+        self.down_button = False
+
+        self.bullet_speed = self.engine.config.enemy_bullet_speed
+
+    def tick(self, dt):
+        if self.engine.entityMgr.player.position[0] + 100 < self.position[0]:
+            self.moving_right = False
+            self.moving_left = True
+        elif self.engine.entityMgr.player.position[0] - 100 > self.position[0]:
+            self.moving_right = True
+            self.moving_left = False
+        else:
+            self.moving_right = False
+            self.moving_left = False
+        
+        for aspect in self.aspects:
+            aspect.tick(dt)
+
+        posx = self.position[0] + self.velocity[0] * dt
+        posy = self.position[1] + self.velocity[1] * dt
+
+        self.position = (posx, posy)
+        self.check_collisions()
+
+    def draw(self):
+        if self.in_camera():
+            scroll = self.engine.gfxMgr.scroll
+            self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
+
+            if self.engine.config.bounding_boxes:
+                pygame.draw.rect(self.display_surface, self.color, self.rect, 1)
+            self.engine.gfxMgr.enemies_rendered += 1
+
+    def check_collisions(self):
+        self.check_enemy_collisions()
+        if self.check_platform_collisions():
+            self.is_grounded = True
+            self.double_jumped = False
+            self.jump = 0
+        elif self.keep_in_screen():
+            self.is_grounded = True
+            self.double_jumped = False
+            self.jump = 0
+        else:
+            self.is_grounded = False
+
+
+    def check_enemy_collisions(self):
+        for enemy in self.engine.entityMgr.enemies:
+            if self.identity != enemy.identity:
+                if self.position[0] + self.size[0] > enemy.position[0] - 10 and self.position[0] < enemy.position[0] + enemy.size[0] + 10:
+                    if self.position[1] + self.size[1] > enemy.position[1] and self.position[1] < enemy.position[1] + enemy.size[1]:
+                        if self.position[0] < enemy.position[0] + enemy.size[0] / 2:
+                            posx = enemy.position[0] - self.size[0] - 10
+                            posy = self.position[1]
+
+                            self.position = (posx, posy)
+                        else:
+                            posx = enemy.position[0] + self.size[0] + 10
+                            posy = self.position[1]
+
+                            self.position = (posx, posy)
+
+        
+
+    def keep_in_screen(self):
+        collision = False
+        if self.position[1] + self.size[1]>= self.engine.config.window_size[1]:
+            self.position = (self.position[0], self.engine.config.window_size[1] - self.size[1])
+            self.velocity = (self.velocity[0], 0)
+            collision = True
+
+        elif self.position[1] < 0:
+            self.position = (self.position[0], 0)
+            self.velocity = (self.velocity[0], 0)
+
+        # if self.position[0] <= 0:
+        #     self.position = (0, self.position[1])
+        # if self.position[0] + self.size[0] > self.engine.config.window_size[0]:
+        #     self.position = (self.engine.config.window_size[0] - self.size[0], self.position[1])
+        return collision
+
+
+    def check_platform_collisions(self):
+        collision = False
+        if self.velocity[1] >= 0:
+            for platform in self.engine.entityMgr.platforms:
+                if self.position[0] + self.size[0]  >= platform.position[0] and self.position[0] <= platform.position[0] + platform.size[0]:
+                    if self.position[1] + self.size[1] >= platform.position[1] and self.position[1] + self.size[1] <= platform.position[1] + platform.size[1]:
+                        self.position = (self.position[0], platform.position[1] - self.size[1]+1)
+
+                        collision = True
+                        self.is_grounded = True
+                        break
+        return collision
+
+
+    def in_camera(self):
+        result = True
+        
+        if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
+            result = False
+
         return result
