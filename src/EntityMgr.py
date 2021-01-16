@@ -36,7 +36,8 @@ class EntityMgr():
                 image = self.engine.config.image_file_grass_0
             else:
                 image = self.engine.config.image_file_dirt_0
-            newPlatform = Platform(self.engine, image, (32, 32), 0, self.engine.gfxMgr.window, (platform[0], platform[1]))
+            scale = self.engine.config.scale
+            newPlatform = Platform(self.engine, image, (32, 32), 0, self.engine.gfxMgr.window, (platform[0] * scale, platform[1] * scale))
             self.platforms.append(newPlatform)
             if newPlatform.position[0] > self.furthest_object:
                 self.furthest_object = newPlatform.position[0]

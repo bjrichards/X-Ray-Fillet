@@ -45,6 +45,8 @@ class GfxMgr():
         if self.engine.gameMgr.game_status == 'IN_GAME':
             if self.scroll_locked == False:
                 self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 80    
+                self.scroll[1] += ((self.engine.entityMgr.player.position[1] - self.scroll[1]) - self.engine.config.window_size[1] / 2 + self.engine.entityMgr.player.size[1] / 2) / 80    
+                
                 # print(abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]))
                 if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 40:
                     self.scroll_locked = True
@@ -52,12 +54,9 @@ class GfxMgr():
                 # self.scroll_locked = True
             else:
                 self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 20
+                self.scroll[1] += ((self.engine.entityMgr.player.position[1] - self.scroll[1]) - self.engine.config.window_size[1] / 2 + self.engine.entityMgr.player.size[1] / 2) / 20
+                
 
-            
-
-            self.engine.entityMgr.player.draw()
-            
-            
 
             self.platforms_rendered = 0
             for platform in self.engine.entityMgr.platforms:

@@ -50,17 +50,17 @@ class UiMgr():
             if self.show_fps:
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_fps(), (10, 0))
             if self.show_grounded:
-                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_is_grounded(), (200, 0))
+                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_is_grounded(), (300, 0))
             if self.show_jumps_left:
-                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_show_jumps(), (400, 0))
+                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_show_jumps(), (600, 0))
             if self.show_bullet_count:
-                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_bullet_count(), (600, 0))
+                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_bullet_count(), (900, 0))
             if self.show_platforms_rendered:
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_platforms_rendered(), (10, 50))
             if self.show_total_enemy_count:
-                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_count(), (200, 50))
+                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_count(), (300, 50))
             if self.show_total_enemy_rendered:
-                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_rendered_count(), (400, 50))
+                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_rendered_count(), (600, 50))
 
         elif self.engine.gameMgr.game_status == 'MENU':
             transparent_background = pygame.Surface((self.engine.config.window_size[0], self.engine.config.window_size[1]))
