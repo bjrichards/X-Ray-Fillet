@@ -5,7 +5,7 @@
 
 # Includes
 import pygame
-import math
+import math, random
 from .Aspect import Physics2D
 
 # Class
@@ -109,7 +109,6 @@ class Player(Entity):
 
         if self.engine.config.bounding_boxes:
             pygame.draw.rect(self.display_surface, self.color, self.rect, 1)
-            pygame.draw.circle(self.display_surface, self.color, (self.position[0] - scroll[0] + self.size[0] / 2, self.position[1] - scroll[1] + self.size[1] / 2), 20, 1)
 
 
     def check_collisions(self):
@@ -279,9 +278,24 @@ class Bullet(Entity):
 
             if collision == True:
                 self.engine.entityMgr.enemies.pop(index)
+                self.create_explosive_particles()
                 return True
 
             index = index + 1
+
+    def create_explosive_particles(self):
+        number_of_particles = random.randrange(3, 30, 1)
+
+        for i in range(number_of_particles):
+            size = random.randrange(1, 2, 1)
+            pos = self.position
+
+            velocity_x = random.triangular(-1, 1)
+            velocity_y = random.triangular(-1, 1)
+
+            particle = Particle(self.engine, None, (size, size), len(self.engine.entityMgr.particles), self.engine.gfxMgr.window, pos, (velocity_x, velocity_y))
+            self.engine.entityMgr.particles.append(particle)
+
 
 
 class Enemy (Entity):
@@ -381,10 +395,6 @@ class Enemy (Entity):
             self.position = (self.position[0], 0)
             self.velocity = (self.velocity[0], 0)
 
-        # if self.position[0] <= 0:
-        #     self.position = (0, self.position[1])
-        # if self.position[0] + self.size[0] > self.engine.config.window_size[0]:
-        #     self.position = (self.engine.config.window_size[0] - self.size[0], self.position[1])
         return collision
 
 
@@ -408,4 +418,42 @@ class Enemy (Entity):
         if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
             result = False
 
+        return result
+
+
+# Particle Entity
+class Particle(Entity):
+    def __init__(self, engine, image_file_name, size, identity, display, position, velocity):
+        Entity.__init__(self, engine, image_file_name, size, identity, display)
+        
+        self.entity_type = "Particle"
+
+        self.velocity = velocity
+
+        self.position = position
+        
+        self.color = (255, 0, 0)
+        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] + self.size[1] / 2), self.size[0])
+
+        self.time_alive = 0
+
+
+    def draw(self):
+        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] + self.size[1] / 2), self.size[0])
+
+    
+    def tick(self, dt):
+        Entity.tick(self, dt)
+
+        self.time_alive = self.time_alive + self.engine.clock.get_time()
+        
+        self.position = (self.position[0] + self.velocity[0] * dt, self.position[1] + self.velocity[1] * dt)
+
+
+    def still_alive(self):
+        result = False
+
+        if self.time_alive / 1000 < 5:
+            result = True
+        
         return result

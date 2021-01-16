@@ -70,6 +70,9 @@ class GfxMgr():
             for bullet in self.engine.entityMgr.bullets:
                 bullet.draw()
 
+            for particle in self.engine.entityMgr.particles:
+                particle.draw()
+
             self.engine.entityMgr.player.draw()
 
         self.engine.uiMgr.tick(dt)

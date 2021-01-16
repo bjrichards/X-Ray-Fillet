@@ -18,29 +18,27 @@ class EntityMgr():
     
     def initialize(self):
 
-        self.player = Player(self.engine, None, (40, 40), 0, self.engine.gfxMgr.window)
+        self.player = Player(self.engine, None, (16, 32), 0, self.engine.gfxMgr.window)
         self.player.initialize()
 
         self.platforms = []
         self.furthest_object = 0
 
-        self.enemies = []
-        # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (0, 600))
-        
-        # platform = Platform(self.engine, None, (400, 30), 0, self.engine.gfxMgr.window, (1024-400, 300))
-        # self.platforms.append(platform)
+        self.particles = []
 
+        self.enemies = []
+        
         self.bullets = []
 
     def load_map(self):
         for platform in self.engine.gameMgr.platforms:
-            newPlatform = Platform(self.engine, None, (platform[1], 30), 0, self.engine.gfxMgr.window, (platform[0], platform[2]))
+            newPlatform = Platform(self.engine, None, (32, 32), 0, self.engine.gfxMgr.window, (platform[0], platform[1]))
             self.platforms.append(newPlatform)
             if newPlatform.position[0] > self.furthest_object:
                 self.furthest_object = newPlatform.position[0]
 
         for enemy in self.engine.gameMgr.enemies:
-            newEnemy = Enemy(self.engine, None, (30, 60), len(self.enemies), self.engine.gfxMgr.window)
+            newEnemy = Enemy(self.engine, None, (16, 32), len(self.enemies), self.engine.gfxMgr.window)
             newEnemy.position = (enemy[0], enemy[1])
             self.enemies.append(newEnemy)
 
@@ -53,8 +51,13 @@ class EntityMgr():
 
             for bullet in self.bullets:
                 bullet.tick(dt)
+            
+            for particle in self.particles:
+                particle.tick(dt)
 
             self.bullets[:] = [bullet for bullet in self.bullets if bullet.still_alive() and not bullet.check_collision()]
+            self.particles[:] = [particle for particle in self.particles if particle.still_alive()]
+
 
 
     def shutdown(self):

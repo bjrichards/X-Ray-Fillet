@@ -1,5 +1,5 @@
 class baseConfig():
-    window_size = (1024, 768)
+    window_size = (1280, 768)
     window_name = "Base Engine"
 
     fps = 800
