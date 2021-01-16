@@ -5,7 +5,7 @@ class baseConfig():
     fps = 800
 
     # UI Debugging Options
-    bounding_boxes = True
+    bounding_boxes = False
     show_fps = True
     show_is_grounded = True
     show_jumps_left = True
@@ -27,6 +27,10 @@ class baseConfig():
 
     # Image Files
     start_game_button_0 = "assets\\img\\ui\\button_unpause.bmp" 
+    image_file_grass_0 = "assets\\img\\game\\grass_0.bmp"
+    image_file_dirt_0 = "assets\\img\\game\\dirt.bmp"
+    image_file_character_0 = "assets\\img\\game\\character_0.bmp"
+    image_file_enemy_0 = "assets\\img\\game\\enemy_0.bmp"
 
 class developmentConfig(baseConfig):
     window_name = "DEV X-Ray Fillet Engine"

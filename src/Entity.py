@@ -75,7 +75,11 @@ class Player(Entity):
         
         self.color = (255, 255, 255)
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
-    
+
+        self.image_file_path = image_file_name
+        self.image = pygame.image.load(self.image_file_path).convert()        
+        self.image = pygame.transform.scale(self.image, self.size)
+
         self.aspects.append(Physics2D(self))
 
         self.is_grounded = False
@@ -104,11 +108,11 @@ class Player(Entity):
 
     def draw(self):
         scroll = self.engine.gfxMgr.scroll
-        self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
-        # self.display_surface.blit(self.display_surface, self.rect)
-
+        position = (self.position[0] - scroll[0], self.position[1] - scroll[1])
+        self.display_surface.blit(self.image, position)
+        
         if self.engine.config.bounding_boxes:
-            pygame.draw.rect(self.display_surface, self.color, self.rect, 1)
+            self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
 
 
     def check_collisions(self):
@@ -190,13 +194,20 @@ class Platform(Entity):
         self.color = (100, 255, 100)
         self.position = position
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
-        
+        self.image_file_path = image_file_name
+        self.image = pygame.image.load(self.image_file_path).convert()        
+        self.image = pygame.transform.scale(self.image, self.size)
+
 
     def draw(self):
         if self.in_camera():
             scroll = self.engine.gfxMgr.scroll
-            self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
-            pygame.draw.rect(self.display_surface, self.color, self.rect)
+            position = (self.position[0] - scroll[0], self.position[1] - scroll[1])
+            self.display_surface.blit(self.image, position)
+
+            if self.engine.config.bounding_boxes:
+                self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
+                pygame.draw.rect(self.display_surface, self.color, self.rect)
             self.engine.gfxMgr.platforms_rendered += 1
 
 
@@ -318,6 +329,10 @@ class Enemy (Entity):
         self.color = (255, 0, 0)
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
     
+        self.image_file_path = image_file_name
+        self.image = pygame.image.load(self.image_file_path).convert()        
+        self.image = pygame.transform.scale(self.image, self.size)
+
         self.aspects.append(Physics2D(self))
 
         self.is_grounded = False
@@ -359,10 +374,12 @@ class Enemy (Entity):
     def draw(self):
         if self.in_camera():
             scroll = self.engine.gfxMgr.scroll
-            self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
-
+            position = (self.position[0] - scroll[0], self.position[1] - scroll[1])
+            self.display_surface.blit(self.image, position)
+            
             if self.engine.config.bounding_boxes:
-                pygame.draw.rect(self.display_surface, self.color, self.rect, 1)
+                self.rect = pygame.Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
+
             self.engine.gfxMgr.enemies_rendered += 1
 
     def check_collisions(self):
