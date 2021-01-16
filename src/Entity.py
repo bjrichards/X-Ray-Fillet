@@ -238,6 +238,9 @@ class Bullet(Entity):
 
         if self.time_alive / 1000 < self.lifetime_max:
             result = True
+
+        if not self.in_camera():
+            result = False
         
         return result
 
@@ -297,6 +300,14 @@ class Bullet(Entity):
             self.engine.entityMgr.particles.append(particle)
 
 
+    def in_camera(self):
+        result = True
+        
+        if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
+            result = False
+
+        return result
+
 
 class Enemy (Entity):
     def __init__(self, engine, image_file_name, size, identity, display):
@@ -324,24 +335,26 @@ class Enemy (Entity):
         self.bullet_speed = self.engine.config.enemy_bullet_speed
 
     def tick(self, dt):
-        if self.engine.entityMgr.player.position[0] + 100 < self.position[0]:
-            self.moving_right = False
-            self.moving_left = True
-        elif self.engine.entityMgr.player.position[0] - 100 > self.position[0]:
-            self.moving_right = True
-            self.moving_left = False
-        else:
-            self.moving_right = False
-            self.moving_left = False
         
-        for aspect in self.aspects:
-            aspect.tick(dt)
+        if self.in_camera():
+            if self.engine.entityMgr.player.position[0] + 100 < self.position[0]:
+                self.moving_right = False
+                self.moving_left = True
+            elif self.engine.entityMgr.player.position[0] - 100 > self.position[0]:
+                self.moving_right = True
+                self.moving_left = False
+            else:
+                self.moving_right = False
+                self.moving_left = False
+            
+            for aspect in self.aspects:
+                aspect.tick(dt)
 
-        posx = self.position[0] + self.velocity[0] * dt
-        posy = self.position[1] + self.velocity[1] * dt
+            posx = self.position[0] + self.velocity[0] * dt
+            posy = self.position[1] + self.velocity[1] * dt
 
-        self.position = (posx, posy)
-        self.check_collisions()
+            self.position = (posx, posy)
+            self.check_collisions()
 
     def draw(self):
         if self.in_camera():
