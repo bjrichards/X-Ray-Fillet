@@ -34,17 +34,23 @@ class EntityMgr():
         for platform in self.engine.gameMgr.platforms:
             if platform[2] == 'G':
                 image = self.engine.config.image_file_grass_0
-            else:
+                pType = 'G'
+            elif platform[2] == 'D':
                 image = self.engine.config.image_file_dirt_0
+                pType = 'D'
+            elif platform[2] == 'I':
+                image = None
+                pType = 'I'
             scale = self.engine.config.scale
-            newPlatform = Platform(self.engine, image, (32, 32), 0, self.engine.gfxMgr.window, (platform[0] * scale, platform[1] * scale))
+            newPlatform = Platform(self.engine, image, (32, 32), 0, self.engine.gfxMgr.window, (platform[0] * scale, platform[1] * scale), pType)
+
             self.platforms.append(newPlatform)
             if newPlatform.position[0] > self.furthest_object:
                 self.furthest_object = newPlatform.position[0]
 
         for enemy in self.engine.gameMgr.enemies:
             newEnemy = Enemy(self.engine, self.engine.config.image_file_enemy_0, (16, 32), len(self.enemies), self.engine.gfxMgr.window)
-            newEnemy.position = (enemy[0], enemy[1])
+            newEnemy.position = (enemy[0] * scale, enemy[1] * scale)
             self.enemies.append(newEnemy)
 
         self.player.load_level((self.engine.gameMgr.player_load_pos[0] * scale, self.engine.gameMgr.player_load_pos[1] * scale))

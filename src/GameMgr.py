@@ -77,6 +77,9 @@ class GameMgr():
                 elif char == 'D':
                     platform = (col * scale[0], row * scale[1], 'D')
                     self.platforms.append(platform)
+                elif char == 'I':
+                    platform = (col * scale[0], row * scale[1], 'I')
+                    self.platforms.append(platform)
 
                 elif char == 'X':
                     self.player_load_pos = (col * scale[0], row * scale[1])

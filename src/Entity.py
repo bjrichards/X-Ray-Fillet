@@ -18,6 +18,8 @@ class Entity():
 
         self.display_surface = display
 
+        self.block_exlusion = None
+
         self.position = (0,0)
         self.velocity = (0,0)
         self.acceleration = (0,0)
@@ -75,6 +77,8 @@ class Player(Entity):
         self.color = (255, 255, 255)
         self.position = position
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
+
+        self.block_exlusion = 'I'
 
         self.image_file_path = image_file_name
         self.image = pygame.image.load(self.image_file_path).convert()        
@@ -165,20 +169,23 @@ class Player(Entity):
 
     
 class Platform(Entity):
-    def __init__(self, engine, image_file_name, size, identity, display, position):
+    def __init__(self, engine, image_file_name, size, identity, display, position, pType):
         Entity.__init__(self, engine, image_file_name, size, identity, display)
 
         self.color = (100, 255, 100)
         self.position = position
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
-        self.image_file_path = image_file_name
-        self.image = pygame.image.load(self.image_file_path).convert()      
-        self.size = (self.image.get_size()[0] * self.engine.config.scale, self.image.get_size()[1] * self.engine.config.scale)
-        self.image = pygame.transform.scale(self.image, self.size)
+        self.image = None
+        self.pType = pType
+        if self.pType != 'I':
+            self.image_file_path = image_file_name
+            self.image = pygame.image.load(self.image_file_path).convert()      
+            self.size = (self.image.get_size()[0] * self.engine.config.scale, self.image.get_size()[1] * self.engine.config.scale)
+            self.image = pygame.transform.scale(self.image, self.size)
 
 
     def draw(self):
-        if self.in_camera():
+        if self.in_camera() and self.pType != 'I':
             scroll = self.engine.gfxMgr.scroll
             position = (self.position[0] - scroll[0], self.position[1] - scroll[1])
             self.display_surface.blit(self.image, position)

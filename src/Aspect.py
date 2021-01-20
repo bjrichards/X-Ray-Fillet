@@ -50,31 +50,33 @@ class Physics2D(Aspect):
         # First check for any horizontal collisions
         next_xpos = self.entity.position[0] + velx * dt
         for platform in self.entity.engine.entityMgr.platforms:
-            if next_xpos  + self.entity.size[0] > platform.position[0] and next_xpos < platform.position[0] + platform.size[0] and self.entity.position[1] + self.entity.size[1]> platform.position[1] and self.entity.position[1] < platform.position[1] + platform.size[1]:
-                if velx > 0:
-                    velx = 0
-                    next_xpos = platform.position[0] - self.entity.size[0]
-                elif velx < 0:
-                    velx = 0
-                    next_xpos = platform.position[0] + platform.size[0]
-                break
+            if platform.pType != self.entity.block_exlusion: 
+                if next_xpos  + self.entity.size[0] > platform.position[0] and next_xpos < platform.position[0] + platform.size[0] and self.entity.position[1] + self.entity.size[1]> platform.position[1] and self.entity.position[1] < platform.position[1] + platform.size[1]:
+                    if velx > 0:
+                        velx = 0
+                        next_xpos = platform.position[0] - self.entity.size[0]
+                    elif velx < 0:
+                        velx = 0
+                        next_xpos = platform.position[0] + platform.size[0]
+                    break
 
         # Now check for any vertical collisions
         next_ypos = self.entity.position[1] + vely * dt
         for platform in self.entity.engine.entityMgr.platforms:
-            if next_xpos  + self.entity.size[0] > platform.position[0] and next_xpos < platform.position[0] + platform.size[0] and next_ypos + self.entity.size[1] > platform.position[1] and next_ypos < platform.position[1] + platform.size[1]:
-                if vely > 0:
-                    vely = 0
-                    next_ypos = platform.position[1] - self.entity.size[1]
-                    collision = True
-                    self.entity.jump = 0
-                    jump = 0
-                    self.entity.is_grounded = True
-                elif vely < 0:
-                    vely = 0
-                    next_ypos = platform.position[1] + platform.size[1]
-                
-                break   
+            if platform.pType != self.entity.block_exlusion: 
+                if next_xpos  + self.entity.size[0] > platform.position[0] and next_xpos < platform.position[0] + platform.size[0] and next_ypos + self.entity.size[1] > platform.position[1] and next_ypos < platform.position[1] + platform.size[1]:
+                    if vely > 0:
+                        vely = 0
+                        next_ypos = platform.position[1] - self.entity.size[1]
+                        collision = True
+                        self.entity.jump = 0
+                        jump = 0
+                        self.entity.is_grounded = True
+                    elif vely < 0:
+                        vely = 0
+                        next_ypos = platform.position[1] + platform.size[1]
+                    
+                    break   
         
         if not collision:
             self.entity.is_grounded = False
