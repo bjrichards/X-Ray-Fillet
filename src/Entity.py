@@ -83,7 +83,7 @@ class Player(Entity):
 
         self.is_grounded = False
 
-        self.max_velocity = (0.5, 8)
+        self.max_velocity = (self.engine.config.max_player_vel[0], self.engine.config.max_player_vel[1])
 
         self.single_jumped = False
         self.double_jumped = False

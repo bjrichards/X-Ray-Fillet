@@ -22,6 +22,7 @@ class baseConfig():
 
     player_bullet_speed = 0.8
     player_bullet_lifetime = 5
+    max_player_vel = (0.5, 1.5)
 
     enemy_bullet_speed = 0.6
 
