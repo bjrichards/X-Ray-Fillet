@@ -67,12 +67,13 @@ class Entity():
 
 
 class Player(Entity):
-    def __init__(self, engine, image_file_name, size, identity, display):
+    def __init__(self, engine, image_file_name, size, identity, display, position):
         Entity.__init__(self, engine, image_file_name, size, identity, display)
         
         self.entity_type = "Player"
         
         self.color = (255, 255, 255)
+        self.position = position
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
 
         self.image_file_path = image_file_name
@@ -98,6 +99,10 @@ class Player(Entity):
     def tick(self, dt):
         for aspect in self.aspects:
             aspect.tick(dt)
+
+    def load_level(self, position):
+        self.position = position
+        self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
 
 
     def draw(self):

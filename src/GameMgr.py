@@ -28,7 +28,6 @@ class GameMgr():
         self.create_active_map()
         self.engine.entityMgr.load_map()
         self.engine.gfxMgr.scroll[0] = self.engine.entityMgr.furthest_object 
-        self.engine.entityMgr.player.position =  self.player_load_pos
 
         self.game_status = 'IN_GAME'
         self.engine.gravity = self.engine.config.gravity
@@ -90,6 +89,7 @@ class GameMgr():
             row += 1
 
         print('\nfinished')
+        print(self.player_load_pos)
 
         # self.f.close()
         # self.f = open("data\map.txt", 'r')

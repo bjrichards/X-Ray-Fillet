@@ -18,7 +18,7 @@ class EntityMgr():
     
     def initialize(self):
 
-        self.player = Player(self.engine, self.engine.config.image_file_character_0, (16, 32), 0, self.engine.gfxMgr.window)
+        self.player = Player(self.engine, self.engine.config.image_file_character_0, (16, 32), 0, self.engine.gfxMgr.window, (0,0))
         self.player.initialize()
 
         self.platforms = []
@@ -46,6 +46,9 @@ class EntityMgr():
             newEnemy = Enemy(self.engine, self.engine.config.image_file_enemy_0, (16, 32), len(self.enemies), self.engine.gfxMgr.window)
             newEnemy.position = (enemy[0], enemy[1])
             self.enemies.append(newEnemy)
+
+        self.player.load_level((self.engine.gameMgr.player_load_pos[0] * scale, self.engine.gameMgr.player_load_pos[1] * scale))
+
 
     def tick(self, dt):
         if self.engine.gameMgr.game_status == 'IN_GAME':
