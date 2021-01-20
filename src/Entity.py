@@ -83,7 +83,7 @@ class Player(Entity):
 
         self.is_grounded = False
 
-        self.max_velocity = (0.5, 1.5)
+        self.max_velocity = (0.5, 8)
 
         self.single_jumped = False
         self.double_jumped = False
@@ -99,11 +99,6 @@ class Player(Entity):
         for aspect in self.aspects:
             aspect.tick(dt)
 
-        posx = self.position[0] + self.velocity[0] * dt
-        posy = self.position[1] + self.velocity[1] * dt
-
-        self.position = (posx, posy)
-        self.check_collisions()
 
     def draw(self):
         scroll = self.engine.gfxMgr.scroll
@@ -138,46 +133,19 @@ class Player(Entity):
             self.position = (self.position[0], 0)
             self.velocity = (self.velocity[0], 0)
 
-        # if self.position[0] <= 0:
-        #     self.position = (0, self.position[1])
-        # if self.position[0] + self.size[0] > self.engine.config.window_size[0]:
-        #     self.position = (self.engine.config.window_size[0] - self.size[0], self.position[1])
-        return collision
-
-
-    def check_platform_collisions(self):
-        collision = False
-        for platform in self.engine.entityMgr.platforms:
-            if self.position[0] + self.size[0]  >= platform.position[0] and self.position[0] <= platform.position[0] + platform.size[0]:
-                if self.position[1] + self.size[1] >= platform.position[1] and self.position[1] <= platform.position[1] + platform.size[1]:
-                    if self.position[1] + self.size[1] <= platform.position[1] + platform.size[1] / 2:
-                        self.position = (self.position[0], platform.position[1] - platform.size[1])
-                        collision = True
-                        self.is_grounded = True
-                        break
-
-                    else:
-                        collision = True
-                        self.velocity = (self.velocity[0], 0)
-                        self.position = (self.position[0], platform.position[1] + platform.size[1])
-                        break
-                
-
         return collision
 
 
     def jump_(self):
-        velx = self.velocity[0]
-        vely = self.velocity[1]
-        self.is_grounded = False
+        if (self.is_grounded == True and self.jump == 0) or (self.is_grounded == False and self.jump < 2): 
+            self.is_grounded = False
 
-        if self.jump < 2:
             self.jump = self.jump + 1
             
             velx = self.velocity[0]
-            vely = -1.4
-        
-        self.velocity = (velx, vely)
+            vely = -1.5
+            
+            self.velocity = (velx, vely)
 
 
     def fire(self, pos_to_fire_toward):
@@ -372,12 +340,14 @@ class Enemy (Entity):
             
             for aspect in self.aspects:
                 aspect.tick(dt)
+            
+            self.check_enemy_collisions()
 
-            posx = self.position[0] + self.velocity[0] * dt
-            posy = self.position[1] + self.velocity[1] * dt
+            # posx = self.position[0] + self.velocity[0] * dt
+            # posy = self.position[1] + self.velocity[1] * dt
 
-            self.position = (posx, posy)
-            self.check_collisions()
+            # self.position = (posx, posy)
+            # self.check_collisions()
 
     def draw(self):
         if self.in_camera():
@@ -392,16 +362,7 @@ class Enemy (Entity):
 
     def check_collisions(self):
         self.check_enemy_collisions()
-        if self.check_platform_collisions():
-            self.is_grounded = True
-            self.double_jumped = False
-            self.jump = 0
-        # elif self.keep_in_screen():
-        #     self.is_grounded = True
-        #     self.double_jumped = False
-        #     self.jump = 0
-        else:
-            self.is_grounded = False
+        
 
 
     def check_enemy_collisions(self):
