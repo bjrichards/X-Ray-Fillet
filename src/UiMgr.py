@@ -61,6 +61,7 @@ class UiMgr():
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_count(), (300, 50))
             if self.show_total_enemy_rendered:
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_rendered_count(), (600, 50))
+            self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_player_lives_left(), (900, 50))
 
         elif self.engine.gameMgr.game_status == 'MENU':
             transparent_background = pygame.Surface((self.engine.config.window_size[0], self.engine.config.window_size[1]))

@@ -75,6 +75,7 @@ class Player(Entity):
         self.entity_type = "Player"
         
         self.color = (255, 255, 255)
+        self.bullet_color = self.engine.config.player_bullet_color
         self.position = position
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
 
@@ -164,7 +165,7 @@ class Player(Entity):
 
         velocity = (direction[0] * self.bullet_speed, direction[1] * self.bullet_speed)
 
-        bullet = Bullet(self.engine, None, (3, 3), 0, self.display_surface, (self.position[0], self.position[1]), velocity)
+        bullet = Bullet(self.engine, None, (3, 3), 0, self.display_surface, (self.position[0], self.position[1]), velocity, "player", self.bullet_color)
         self.engine.entityMgr.bullets.append(bullet)
 
     
@@ -209,15 +210,16 @@ class Platform(Entity):
 
 
 class Bullet(Entity):
-    def __init__(self, engine, image_file_name, size, identity, display, position, velocity):
+    def __init__(self, engine, image_file_name, size, identity, display, position, velocity, bType, bullet_color):
         Entity.__init__(self, engine, image_file_name, size, identity, display)
 
-        self.color = (255, 0, 0)
+        self.color = bullet_color
         self.position = position
         self.velocity = velocity
         self.is_alive = True
         self.time_alive = 0
         self.lifetime_max = self.engine.config.player_bullet_lifetime
+        self.bType = bType
     
 
     def tick(self, dt):
@@ -240,6 +242,19 @@ class Bullet(Entity):
 
         if not self.in_camera():
             result = False
+
+        for platform in self.engine.entityMgr.platforms:
+            if platform.pType != 'I':
+                pos = self.position
+                size = self.size
+
+                ppos = platform.position
+                psize = platform.size
+
+                if pos[0] + size[0] > ppos[0] and pos[0] < ppos[0] + psize[0] and pos[1] + size[1] > ppos[1] and pos[1] < ppos[1] + psize[1]:
+                    result = False
+                    self.create_explosive_particles()
+                    break
         
         return result
 
@@ -247,43 +262,53 @@ class Bullet(Entity):
     def check_collision(self):
         index = 0
 
+        if self.bType == 'player':
+            for enemy in self.engine.entityMgr.enemies:
+                if self.check_collision_entity(enemy):
+                    self.engine.entityMgr.enemies.pop(index)
+                    self.create_explosive_particles()
+                    return True
+                index = index + 1
+
+        elif self.bType == 'enemy':
+            if self.check_collision_entity(self.engine.entityMgr.player):
+               self.engine.gameMgr.player_lives -= 1
+               self.create_explosive_particles() 
+
+               return True
+
+    
+    def check_collision_entity(self, entity):
         cx = self.position[0] + self.size[0] / 2
         cy = self.position[1] + self.size[1] / 2
         r = self.size[0]
 
-        for enemy in self.engine.entityMgr.enemies:
-            rx = enemy.position[0]
-            ry = enemy.position[1]
-            rw = enemy.size[0]
-            rh = enemy.size[1]
+        rx = entity.position[0]
+        ry = entity.position[1]
+        rw = entity.size[0]
+        rh = entity.size[1]
 
-            collision = False
-            
-            testx = cx
-            testy = cy
+        collision = False
+        
+        testx = cx
+        testy = cy
 
-            if cx < rx:
-                testx = rx
-            elif cx > rx + rw:
-                testx = rx + rw
-            if cy < ry:
-                testy = ry
-            elif cy > ry + rh:
-                testy = ry + rh
+        if cx < rx:
+            testx = rx
+        elif cx > rx + rw:
+            testx = rx + rw
+        if cy < ry:
+            testy = ry
+        elif cy > ry + rh:
+            testy = ry + rh
 
-            distx = cx - testx
-            disty = cy - testy
-            distance = math.sqrt((distx * distx) + (disty * disty))
+        distx = cx - testx
+        disty = cy - testy
+        distance = math.sqrt((distx * distx) + (disty * disty))
 
-            if distance <= r:
-                collision = True
+        if distance <= r:
+            return True
 
-            if collision == True:
-                self.engine.entityMgr.enemies.pop(index)
-                self.create_explosive_particles()
-                return True
-
-            index = index + 1
 
     def create_explosive_particles(self):
         number_of_particles = random.randrange(3, 30, 1)
@@ -295,7 +320,7 @@ class Bullet(Entity):
             velocity_x = random.triangular(-1, 1)
             velocity_y = random.triangular(-1, 1)
 
-            particle = Particle(self.engine, None, (size, size), len(self.engine.entityMgr.particles), self.engine.gfxMgr.window, pos, (velocity_x, velocity_y))
+            particle = Particle(self.engine, None, (size, size), len(self.engine.entityMgr.particles), self.engine.gfxMgr.window, pos, (velocity_x, velocity_y), self.color)
             self.engine.entityMgr.particles.append(particle)
 
 
@@ -315,6 +340,7 @@ class Enemy (Entity):
         self.entity_type = "Enemy"
         
         self.color = (255, 0, 0)
+        self.bullet_color = self.engine.config.enemy_bullet_color
         self.rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
     
         self.image_file_path = image_file_name
@@ -355,6 +381,9 @@ class Enemy (Entity):
             
             self.check_enemy_collisions()
 
+            if self.engine.config.enemies_can_fire:
+                if random.randrange(1, 100, 1) > 98:
+                    self.fire(self.engine.entityMgr.player.position)
             # posx = self.position[0] + self.velocity[0] * dt
             # posy = self.position[1] + self.velocity[1] * dt
 
@@ -432,9 +461,20 @@ class Enemy (Entity):
         return result
 
 
+    def fire(self, pos_to_fire_toward):
+        distance = [pos_to_fire_toward[0] - self.position[0], pos_to_fire_toward[1] - self.position[1]]
+        normalized = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        direction = [distance[0] / normalized, distance[1] / normalized]
+
+        velocity = (direction[0] * self.bullet_speed, direction[1] * self.bullet_speed)
+
+        bullet = Bullet(self.engine, None, (3, 3), 0, self.display_surface, (self.position[0], self.position[1]), velocity, "enemy", self.bullet_color)
+        self.engine.entityMgr.bullets.append(bullet)
+
+
 # Particle Entity
 class Particle(Entity):
-    def __init__(self, engine, image_file_name, size, identity, display, position, velocity):
+    def __init__(self, engine, image_file_name, size, identity, display, position, velocity, particle_color):
         Entity.__init__(self, engine, image_file_name, size, identity, display)
         
         self.entity_type = "Particle"
@@ -443,7 +483,7 @@ class Particle(Entity):
 
         self.position = position
         
-        self.color = (255, 0, 0)
+        self.color = particle_color
         
         self.time_alive = 0
 

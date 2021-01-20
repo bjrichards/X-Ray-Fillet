@@ -16,15 +16,20 @@ class baseConfig():
     show_total_enemy_rendered = True
 
 
+    # Gameplay Debugging
+    enemies_can_fire = True
+
     # Gameplay Configurations
     gravity_on = True
     gravity = -.005
 
     player_bullet_speed = 0.8
+    player_bullet_color = (255, 0, 0)
     player_bullet_lifetime = 5
     max_player_vel = (0.5, 1.5)
 
-    enemy_bullet_speed = 0.6
+    enemy_bullet_speed = 0.5
+    enemy_bullet_color = (0, 0, 255)
 
 
     # Image Files

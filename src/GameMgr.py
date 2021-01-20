@@ -17,6 +17,8 @@ class GameMgr():
         self.game_status = None
 
         self.player_load_pos = None
+
+        self.player_lives = 10
         
 
     

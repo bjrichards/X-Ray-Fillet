@@ -123,3 +123,8 @@ class GfxMgr():
         pr = str(self.enemies_rendered)
         result = self.font.render("Enemies Rendered: " + pr, 1, pygame.Color("coral"))
         return result
+
+    def update_player_lives_left(self):
+        pr = str(self.engine.gameMgr.player_lives)
+        result = self.font.render("Player Lives: " + pr, 1, pygame.Color("coral"))
+        return result
