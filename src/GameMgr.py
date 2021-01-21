@@ -13,37 +13,48 @@ class GameMgr():
         self.engine = engine
 
         self.platforms = []
-
         self.game_status = None
-
         self.player_load_pos = None
-
         self.player_lives = 10
         
-
+        self.current_level = 0
+        self.max_level = 3
     
     def initialize(self):
         self.game_status = 'MENU'
 
     def load_level(self, level):
         self.engine.gravity = 0
-        self.create_active_map()
+        self.create_active_map(level)
         self.engine.entityMgr.load_map()
         self.engine.gfxMgr.scroll[0] = self.engine.entityMgr.furthest_object 
+        self.player_lives = 10
 
         self.game_status = 'ENTRY_ANIMATION'
         self.engine.gravity = self.engine.config.gravity
+        self.engine.gfxMgr.scroll_locked = False
 
+        self.current_level = level
 
     def tick(self, dt):
-        if self.game_status == 'START':
+        if self.game_status == 'MENU':
+            pass
+        elif self.game_status == 'START':
             self.load_level(1)
+        elif self.player_lives == 0:
+            self.load_level(self.current_level)
+        elif len(self.engine.entityMgr.enemies) == 0:
+            if self.current_level + 1 <= self.max_level:
+                self.load_level(self.current_level + 1)
+            else:
+                self.game_status = 'MENU'
+                self.current_level = 0
 
 
     def shutdown(self):
         pass
 
-    def create_active_map(self):
+    def create_active_map(self, level):
         self.platforms = []
         self.enemies = []
 
@@ -62,7 +73,7 @@ class GameMgr():
         c_start = 0
         c_active = 0
 
-        self.f = open("data\map.txt", 'r')
+        self.f = open("data\map" + str(level) + ".txt", 'r')
         for line in self.f.read().split('\n'):
             nmap.append(line)
         self.f.close()

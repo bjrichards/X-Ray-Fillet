@@ -31,6 +31,14 @@ class EntityMgr():
         self.bullets = []
 
     def load_map(self):
+        self.platforms = []
+        self.furthest_object = 0
+
+        self.particles = []
+
+        self.enemies = []
+        
+        self.bullets = []
         for platform in self.engine.gameMgr.platforms:
             if platform[2] == 'G':
                 image = self.engine.config.image_file_grass_0
