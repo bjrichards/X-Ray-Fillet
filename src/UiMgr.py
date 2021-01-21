@@ -17,6 +17,7 @@ class UiMgr():
         self.show_fps = None
         self.show_grounded = None
         self.show_jumps_left = None
+        self.show_game_status = None
         self.show_bullet_count = None
         self.show_total_enemy_count = None
         self.show_platforms_rendered = None
@@ -30,6 +31,7 @@ class UiMgr():
         self.show_fps = self.engine.config.show_fps
         self.show_grounded = self.engine.config.show_is_grounded
         self.show_jumps_left = self.engine.config.show_jumps_left
+        self.show_game_status = self.engine.config.show_game_status
         self.show_bullet_count = self.engine.config.show_bullet_count
         self.show_total_enemy_count = self.engine.config.show_total_enemy_count
         self.show_platforms_rendered = self.engine.config.show_platforms_rendered
@@ -46,7 +48,7 @@ class UiMgr():
 
 
     def tick(self, dt):
-        if self.engine.gameMgr.game_status == 'IN_GAME':
+        if self.engine.gameMgr.game_status == 'IN_GAME' or self.engine.gameMgr.game_status == 'ENTRY_ANIMATION':
             if self.show_fps:
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_fps(), (10, 0))
             if self.show_grounded:
@@ -61,7 +63,10 @@ class UiMgr():
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_count(), (300, 50))
             if self.show_total_enemy_rendered:
                 self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_enemy_rendered_count(), (600, 50))
-            self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_player_lives_left(), (900, 50))
+            if self.show_game_status:
+                self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_game_status(), (900, 50))
+            
+            self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_player_lives_left(), (10, 100))
 
         elif self.engine.gameMgr.game_status == 'MENU':
             transparent_background = pygame.Surface((self.engine.config.window_size[0], self.engine.config.window_size[1]))

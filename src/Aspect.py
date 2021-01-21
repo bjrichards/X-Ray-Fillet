@@ -46,11 +46,16 @@ class Physics2D(Aspect):
 
     def collisions(self, velx, vely, dt):
         collision = False
+        check_all = True
+        if self.entity.entity_type == "Player":
+            check_all = False
 
         # First check for any horizontal collisions
         next_xpos = self.entity.position[0] + velx * dt
         for platform in self.entity.engine.entityMgr.platforms:
-            if platform.pType != self.entity.block_exlusion: 
+            if not check_all and not platform.in_camera():
+                pass
+            elif platform.pType != self.entity.block_exlusion: 
                 if next_xpos  + self.entity.size[0] > platform.position[0] and next_xpos < platform.position[0] + platform.size[0] and self.entity.position[1] + self.entity.size[1]> platform.position[1] and self.entity.position[1] < platform.position[1] + platform.size[1]:
                     if velx > 0:
                         velx = 0
@@ -63,7 +68,9 @@ class Physics2D(Aspect):
         # Now check for any vertical collisions
         next_ypos = self.entity.position[1] + vely * dt
         for platform in self.entity.engine.entityMgr.platforms:
-            if platform.pType != self.entity.block_exlusion: 
+            if not check_all and not platform.in_camera():
+                pass
+            elif platform.pType != self.entity.block_exlusion: 
                 if next_xpos  + self.entity.size[0] > platform.position[0] and next_xpos < platform.position[0] + platform.size[0] and next_ypos + self.entity.size[1] > platform.position[1] and next_ypos < platform.position[1] + platform.size[1]:
                     if vely > 0:
                         vely = 0

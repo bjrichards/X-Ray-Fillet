@@ -14,6 +14,7 @@ class baseConfig():
     show_platforms_rendered = True
     show_total_enemy_count = True
     show_total_enemy_rendered = True
+    show_game_status = True
 
 
     # Gameplay Debugging
@@ -45,6 +46,16 @@ class developmentConfig(baseConfig):
 
 class uatConfig(baseConfig):
     window_name = "UAT X-Ray Fillet Engine"
+
+    bounding_boxes = False
+    show_fps = True
+    show_is_grounded = False
+    show_jumps_left = False
+    show_bullet_count = False
+    show_platforms_rendered = False
+    show_total_enemy_count = False
+    show_total_enemy_rendered = False
+    show_game_status = False
 
 
 class productionConfig(baseConfig):

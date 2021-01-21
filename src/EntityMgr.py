@@ -55,7 +55,7 @@ class EntityMgr():
 
         self.player.load_level((self.engine.gameMgr.player_load_pos[0] * scale, self.engine.gameMgr.player_load_pos[1] * scale))
 
-
+    
     def tick(self, dt):
         if self.engine.gameMgr.game_status == 'IN_GAME':
             self.player.tick(dt)
@@ -63,14 +63,10 @@ class EntityMgr():
             for enemy in self.enemies:
                 enemy.tick(dt)
 
-            for bullet in self.bullets:
-                bullet.tick(dt)
-            
-            for particle in self.particles:
-                particle.tick(dt)
+            self.bullets[:] = [bullet for bullet in self.bullets if bullet.tick(dt)]
 
-            self.bullets[:] = [bullet for bullet in self.bullets if bullet.still_alive() and not bullet.check_collision()]
-            self.particles[:] = [particle for particle in self.particles if particle.still_alive()]
+            
+            self.particles[:] = [particle for particle in self.particles if particle.tick(dt)]
 
 
 

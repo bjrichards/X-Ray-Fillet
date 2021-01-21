@@ -198,13 +198,11 @@ class Platform(Entity):
 
 
     def in_camera(self):
-        result = True
+        result = False
         
-        if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
-            result = False
-
-        if self.position[1] + self.size[1] < self.engine.gfxMgr.scroll[1] or self.position[1] > self.engine.config.window_size[1] + self.engine.gfxMgr.scroll[1]:
-            result = False
+        if self.position[0] <= self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0] and self.position[0] + self.size[0] >= self.engine.gfxMgr.scroll[0]:
+            if self.position[1] <= self.engine.config.window_size[1] + self.engine.gfxMgr.scroll[1] and self.position[1] + self.size[1] >= self.engine.gfxMgr.scroll[1]:
+                result = True
 
         return result
 
@@ -228,10 +226,16 @@ class Bullet(Entity):
         self.position = (posx, posy)
         self.time_alive = self.time_alive + self.engine.clock.get_time()
         self.is_alive = self.still_alive()
+
+        result = self.is_alive
+        if result:
+            result = not (self.check_collision())
         
+        return result
 
     def draw(self):
-        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] - self.engine.gfxMgr.scroll[1] + self.size[1] / 2), self.size[0])
+        if self.in_camera():
+            pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] - self.engine.gfxMgr.scroll[1] + self.size[1] / 2), self.size[0])
 
 
     def still_alive(self):
@@ -239,9 +243,6 @@ class Bullet(Entity):
 
         if self.time_alive / 1000 < self.lifetime_max:
             result = True
-
-        if not self.in_camera():
-            result = False
 
         for platform in self.engine.entityMgr.platforms:
             if platform.pType != 'I':
@@ -325,10 +326,11 @@ class Bullet(Entity):
 
 
     def in_camera(self):
-        result = True
+        result = False
         
-        if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
-            result = False
+        if self.position[0] <= self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0] and self.position[0] + self.size[0] >= self.engine.gfxMgr.scroll[0]:
+            if self.position[1] <= self.engine.config.window_size[1] + self.engine.gfxMgr.scroll[1] and self.position[1] + self.size[1] >= self.engine.gfxMgr.scroll[1]:
+                result = True
 
         return result
 
@@ -381,7 +383,7 @@ class Enemy (Entity):
             
             self.check_enemy_collisions()
 
-            if self.engine.config.enemies_can_fire:
+            if self.engine.config.enemies_can_fire and self.in_camera():
                 if random.randrange(1, 100, 1) > 98:
                     self.fire(self.engine.entityMgr.player.position)
             # posx = self.position[0] + self.velocity[0] * dt
@@ -422,41 +424,13 @@ class Enemy (Entity):
 
                             self.position = (posx, posy)
 
-        
-
-    def keep_in_screen(self):
-        collision = False
-        if self.position[1] + self.size[1]>= self.engine.config.window_size[1]:
-            self.position = (self.position[0], self.engine.config.window_size[1] - self.size[1])
-            self.velocity = (self.velocity[0], 0)
-            collision = True
-
-        elif self.position[1] < 0:
-            self.position = (self.position[0], 0)
-            self.velocity = (self.velocity[0], 0)
-
-        return collision
-
-
-    def check_platform_collisions(self):
-        collision = False
-        if self.velocity[1] >= 0:
-            for platform in self.engine.entityMgr.platforms:
-                if self.position[0] + self.size[0]  >= platform.position[0] and self.position[0] <= platform.position[0] + platform.size[0]:
-                    if self.position[1] + self.size[1] >= platform.position[1] and self.position[1] + self.size[1] <= platform.position[1] + platform.size[1]:
-                        self.position = (self.position[0], platform.position[1] - self.size[1]+1)
-
-                        collision = True
-                        self.is_grounded = True
-                        break
-        return collision
-
 
     def in_camera(self):
-        result = True
+        result = False
         
-        if self.position[0] + self.size[0] < self.engine.gfxMgr.scroll[0] or self.position[0] > self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0]:
-            result = False
+        if self.position[0] <= self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0] and self.position[0] + self.size[0] >= self.engine.gfxMgr.scroll[0]:
+            if self.position[1] <= self.engine.config.window_size[1] + self.engine.gfxMgr.scroll[1] and self.position[1] + self.size[1] >= self.engine.gfxMgr.scroll[1]:
+                result = True
 
         return result
 
@@ -489,7 +463,8 @@ class Particle(Entity):
 
 
     def draw(self):
-        self.circle = pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] - self.engine.gfxMgr.scroll[1] + self.size[1] / 2), self.size[0])
+        if self.in_camera():
+            pygame.draw.circle(self.display_surface, self.color, (self.position[0] - self.engine.gfxMgr.scroll[0] + self.size[0] / 2, self.position[1] - self.engine.gfxMgr.scroll[1] + self.size[1] / 2), self.size[0])
 
     
     def tick(self, dt):
@@ -499,11 +474,24 @@ class Particle(Entity):
         
         self.position = (self.position[0] + self.velocity[0] * dt, self.position[1] + self.velocity[1] * dt)
 
+        result = self.still_alive()
+        
+        return result
+
 
     def still_alive(self):
         result = False
 
-        if self.time_alive / 1000 < 5:
+        if self.time_alive / 1000 < 3:
             result = True
+        
+        return result
+
+    def in_camera(self):
+        result = False
+
+        if self.position[0] <= self.engine.config.window_size[0] + self.engine.gfxMgr.scroll[0] and self.position[0] + self.size[0] >= self.engine.gfxMgr.scroll[0]:
+            if self.position[1] <= self.engine.config.window_size[1] + self.engine.gfxMgr.scroll[1] and self.position[1] + self.size[1] >= self.engine.gfxMgr.scroll[1]:
+                result = True
         
         return result

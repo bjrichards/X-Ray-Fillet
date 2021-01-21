@@ -42,16 +42,13 @@ class GfxMgr():
         self.window.fill((0,0,0,0))
         self.uiScreen.fill((0,0,0,0))
 
-        if self.engine.gameMgr.game_status == 'IN_GAME':
+        if self.engine.gameMgr.game_status == 'ENTRY_ANIMATION' or self.engine.gameMgr.game_status == 'IN_GAME':
             if self.scroll_locked == False:
                 self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 80    
                 self.scroll[1] += ((self.engine.entityMgr.player.position[1] - self.scroll[1]) - self.engine.config.window_size[1] / 2 + self.engine.entityMgr.player.size[1] / 2) / 80    
-                
-                # print(abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]))
-                if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 40:
+                if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 20:
                     self.scroll_locked = True
-                # self.scroll[0] = self.engine.entityMgr.player.position[0]
-                # self.scroll_locked = True
+                    self.engine.gameMgr.game_status = 'IN_GAME'
             else:
                 self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 20
                 self.scroll[1] += ((self.engine.entityMgr.player.position[1] - self.scroll[1]) - self.engine.config.window_size[1] / 2 + self.engine.entityMgr.player.size[1] / 2) / 20
@@ -127,4 +124,9 @@ class GfxMgr():
     def update_player_lives_left(self):
         pr = str(self.engine.gameMgr.player_lives)
         result = self.font.render("Player Lives: " + pr, 1, pygame.Color("coral"))
+        return result
+
+    def update_game_status(self):
+        pr = str(self.engine.gameMgr.game_status)
+        result = self.font.render("Game Status: " + pr, 1, pygame.Color("coral"))
         return result
