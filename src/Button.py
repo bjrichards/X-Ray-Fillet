@@ -1,10 +1,12 @@
 # Created by Braeden Richards
 # Created on January 7th, 2021
-# Desc:
+# Desc: Button class used for creating, drawing, and checking for a click
+#       on the button
 
-
-# Includes
-import pygame
+############
+# Includes #
+############
+import pygame   # For image loading, blitting
 
 
 # Class
