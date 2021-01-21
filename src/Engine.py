@@ -29,7 +29,6 @@ class Engine():
         self.keepRunning = True
 
         self.clock = pygame.time.Clock()
-
         self.gravity = 0
 
     def initialize(self):
