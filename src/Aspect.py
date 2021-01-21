@@ -3,12 +3,30 @@
 # Desc:
 
 
-# Includes
+###########
+# Imports #
+###########
 import pygame
 
 
 # Classes
 class Aspect():
+    """ 
+    Class used as base Aspect to be inherited from.
+
+    ...
+
+    Attributes
+    ----------
+    entity : object of Entity Class
+        the parent entity this aspect is part of
+
+    Methods
+    -------
+    tick(dt)
+        Update function
+    """
+
     def __init__(self, entity):
         self.entity = entity
     
@@ -21,14 +39,30 @@ class Aspect():
         pass
 
 
-
-class Renderable(Aspect):
-    def tick(self, dt):
-        pass
-
-
-
 class Physics2D(Aspect):
+    """ 
+    Class used to calculate 2D physics of parent Entity
+
+    Inherits from Aspect class. To be added to any entity that is
+    affected by physics. Calculates and applies the gravity, collision
+    detection, and puts the ceiling on velocities. 
+    ...
+
+    Attributes
+    ----------
+    entity : object of Entity Class
+        the parent entity this aspect is part of
+
+    Methods
+    -------
+    tick(dt)
+        Update function.
+
+        Calculates new position based on gravity, velocity, and 
+        collisions.
+        
+    """
+
     def tick(self, dt):
         vely = 0
         velx = 0
