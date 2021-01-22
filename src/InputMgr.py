@@ -27,10 +27,10 @@ class InputMgr():
 
             elif event.type == pygame.KEYDOWN:
                 # Escape Key (exit game)
-                if self.engine.gameMgr.game_status == 'IN_GAME':
-                    if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE:
                         self.engine.keepRunning = False
-                    elif event.key == pygame.K_SPACE or event.key == pygame.K_w:
+                if self.engine.gameMgr.game_status == 'IN_GAME':
+                    if event.key == pygame.K_SPACE or event.key == pygame.K_w:
                         self.engine.entityMgr.player.jump_()
                     
                     elif event.key == pygame.K_a:
