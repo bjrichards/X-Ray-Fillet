@@ -16,6 +16,7 @@ class GameMgr():
         self.game_status = None
         self.player_load_pos = None
         self.player_lives = 10
+        self.goal = None
         
         self.current_level = 0
         self.max_level = 3
@@ -24,15 +25,19 @@ class GameMgr():
         self.game_status = 'MENU'
 
     def load_level(self, level):
+
+        self.clean_values_on_load()
+
         self.engine.gravity = 0
+
         self.create_active_map(level)
         self.engine.entityMgr.load_map()
-        self.engine.gfxMgr.scroll[0] = self.engine.entityMgr.furthest_object 
-        self.player_lives = 10
+        
+        self.engine.gfxMgr.scroll[0] = self.goal[0]
+        self.engine.gfxMgr.scroll[1] = self.goal[1]
 
         self.game_status = 'ENTRY_ANIMATION'
         self.engine.gravity = self.engine.config.gravity
-        self.engine.gfxMgr.scroll_locked = False
 
         self.current_level = level
 
@@ -53,6 +58,17 @@ class GameMgr():
 
     def shutdown(self):
         pass
+
+
+    def clean_values_on_load(self):
+        # Clean Player values
+        self.player_lives = 10
+        self.engine.entityMgr.player.moving_left = False
+        self.engine.entityMgr.player.moving_right = False
+
+        # Set scroll animation to go on
+        self.engine.gfxMgr.scroll_locked = False
+
 
     def create_active_map(self, level):
         self.platforms = []
@@ -100,6 +116,9 @@ class GameMgr():
                 elif char == '0':
                     enemy = (col * scale[0], row * scale[1])
                     self.enemies.append(enemy)
+                
+                elif char == '?':
+                    self.goal = (col * scale[0], row * scale[1])
 
                 col += 1
             row += 1

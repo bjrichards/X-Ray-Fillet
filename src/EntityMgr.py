@@ -53,8 +53,6 @@ class EntityMgr():
             newPlatform = Platform(self.engine, image, (32, 32), 0, self.engine.gfxMgr.window, (platform[0] * scale, platform[1] * scale), pType)
 
             self.platforms.append(newPlatform)
-            if newPlatform.position[0] > self.furthest_object:
-                self.furthest_object = newPlatform.position[0]
 
         for enemy in self.engine.gameMgr.enemies:
             newEnemy = Enemy(self.engine, self.engine.config.image_file_enemy_0, (16, 32), len(self.enemies), self.engine.gfxMgr.window)

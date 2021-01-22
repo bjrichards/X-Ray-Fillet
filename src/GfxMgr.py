@@ -44,9 +44,9 @@ class GfxMgr():
 
         if self.engine.gameMgr.game_status == 'ENTRY_ANIMATION' or self.engine.gameMgr.game_status == 'IN_GAME':
             if self.scroll_locked == False:
-                self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 80    
-                self.scroll[1] += ((self.engine.entityMgr.player.position[1] - self.scroll[1]) - self.engine.config.window_size[1] / 2 + self.engine.entityMgr.player.size[1] / 2) / 80    
-                if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 20:
+                self.scroll[0] += ((self.engine.entityMgr.player.position[0] - self.scroll[0]) - self.engine.config.window_size[0] / 2 + self.engine.entityMgr.player.size[0] / 2) / 100    
+                self.scroll[1] += ((self.engine.entityMgr.player.position[1] - self.scroll[1]) - self.engine.config.window_size[1] / 2 + self.engine.entityMgr.player.size[1] / 2) / 100    
+                if abs(self.scroll[0] + self.engine.config.window_size[0]/2 - self.engine.entityMgr.player.position[0]) < 40:
                     self.scroll_locked = True
                     self.engine.gameMgr.game_status = 'IN_GAME'
             else:
