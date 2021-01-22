@@ -10,7 +10,7 @@ D---GGGGG---------------DD------------------------------------------------------
 D-----------------------------------------------------------------------------------------D-
 D00--------------------------------I---------I0----------------------0--------------00I---D-
 DGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG-----------GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG----D-
-DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD-----------DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD--D-
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD-----DDDDDDDDDDDDD--D-
 D-------------I0-I---------------------------GG-------------------------------------------D-
 D--------------GG-------------------------------------------------------------------------D-
 D---GG---------D---------------------------------I0-I-------------------------------------D-
@@ -18,6 +18,6 @@ D----D------I------0--------I---------------------GG-I--0-----------------00----
 D-I0-I-------GGGGGGGGGGGGGGG--------------------------GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGD-
 D--GG----------DDDDDDDDDDDD---------------GG----------DDDDDDDDDDDDDDDDDDDDD-------DDDDDDDDD-
 D-----------------------------GG----------D-----------------------------------------------D-
-D----------------------------------00-----------------------------------------------------D-
-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGD-
+D?---------------------------------00-----------------------------------------------------D-
+DGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGD-
 DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD-
