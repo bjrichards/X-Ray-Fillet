@@ -461,6 +461,8 @@ class Particle(Entity):
         
         self.time_alive = 0
 
+        self.lifetime_max = self.engine.config.bullet_particle_lifetime
+
 
     def draw(self):
         if self.in_camera():
@@ -482,7 +484,7 @@ class Particle(Entity):
     def still_alive(self):
         result = False
 
-        if self.time_alive / 1000 < 3:
+        if self.time_alive / 1000 < self.lifetime_max:
             result = True
         
         return result

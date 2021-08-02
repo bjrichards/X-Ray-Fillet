@@ -41,11 +41,29 @@ class EntityMgr():
         self.bullets = []
         for platform in self.engine.gameMgr.platforms:
             if platform[2] == 'G':
-                image = self.engine.config.image_file_grass_0
+                image = self.engine.config.image_file_top_0
                 pType = 'G'
             elif platform[2] == 'D':
-                image = self.engine.config.image_file_dirt_0
+                image = self.engine.config.image_file_mid_0
                 pType = 'D'
+            elif platform[2] == 'L':
+                image = self.engine.config.image_file_left_0
+                pType = 'L'
+            elif platform[2] == 'l':
+                image = self.engine.config.image_file_left_1
+                pType = 'l'
+            elif platform[2] == 'B':
+                image = self.engine.config.image_file_bottom_0
+                pType = 'B'
+            elif platform[2] == 'R':
+                image = self.engine.config.image_file_right_0
+                pType = 'R'
+            elif platform[2] == 'r':
+                image = self.engine.config.image_file_right_1
+                pType = 'r'
+            elif platform[2] == 'E':
+                image = self.engine.config.image_file_mid_1
+                pType = 'E'
             elif platform[2] == 'I':
                 image = None
                 pType = 'I'

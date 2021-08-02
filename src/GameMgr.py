@@ -81,14 +81,6 @@ class GameMgr():
         row = 0
         col = 0
 
-        pwidth = 0
-        pstart = 0
-        pactive = False
-
-        c_height = 0
-        c_start = 0
-        c_active = 0
-
         self.f = open("data\map" + str(level) + ".txt", 'r')
         for line in self.f.read().split('\n'):
             nmap.append(line)
@@ -109,7 +101,24 @@ class GameMgr():
                 elif char == 'I':
                     platform = (col * scale[0], row * scale[1], 'I')
                     self.platforms.append(platform)
-
+                elif char == 'L':
+                    platform = (col * scale[0], row * scale[1], 'L')
+                    self.platforms.append(platform)
+                elif char == 'l':
+                    platform = (col * scale[0], row * scale[1], 'l')
+                    self.platforms.append(platform)
+                elif char == 'B':
+                    platform = (col * scale[0], row * scale[1], 'B')
+                    self.platforms.append(platform)
+                elif char == 'R':
+                    platform = (col * scale[0], row * scale[1], 'R')
+                    self.platforms.append(platform)
+                elif char == 'r':
+                    platform = (col * scale[0], row * scale[1], 'r')
+                    self.platforms.append(platform)
+                elif char == 'E':
+                    platform = (col * scale[0], row * scale[1], 'E')
+                    self.platforms.append(platform)
                 elif char == 'X':
                     self.player_load_pos = (col * scale[0], row * scale[1])
 

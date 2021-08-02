@@ -32,11 +32,19 @@ class baseConfig():
     enemy_bullet_speed = 0.5
     enemy_bullet_color = (0, 0, 255)
 
+    bullet_particle_lifetime = 1
+
 
     # Image Files
     start_game_button_0 = "assets\\img\\ui\\button_unpause.bmp" 
-    image_file_grass_0 = "assets\\img\\game\\grass_0.bmp"
-    image_file_dirt_0 = "assets\\img\\game\\dirt.bmp"
+    image_file_top_0 = "assets\\img\\game\\platform_top_01.bmp"
+    image_file_mid_1 = "assets\\img\\game\\platform_07.bmp"
+    image_file_left_0 = "assets\\img\\game\\platform_top_left_00.bmp"
+    image_file_left_1 = "assets\\img\\game\\platform_05.bmp"
+    image_file_right_0 = "assets\\img\\game\\platform_03.bmp"
+    image_file_right_1 = "assets\\img\\game\\platform_06.bmp"
+    image_file_bottom_0 = "assets\\img\\game\\platform_04.bmp"
+    image_file_mid_0 = "assets\\img\\game\\platform_00.bmp"
     image_file_character_0 = "assets\\img\\game\\character_0.bmp"
     image_file_enemy_0 = "assets\\img\\game\\enemy_0.bmp"
 
