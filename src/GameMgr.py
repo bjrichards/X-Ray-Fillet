@@ -20,6 +20,7 @@ class GameMgr():
         self.goal = None
 
         self.spritesheet = None
+        self.spritesheet_character_running = None
         
         self.current_level = 0
         self.max_level = 3
@@ -27,6 +28,8 @@ class GameMgr():
     def initialize(self):
         self.game_status = 'MENU'
         self.spritesheet = SpriteSheet("assets\\img\\game\\spritesheet.bmp")
+        self.spritesheet_character_running = SpriteSheet("assets\\img\\game\\player_running.bmp")
+
 
     def load_level(self, level):
 

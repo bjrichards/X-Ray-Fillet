@@ -37,6 +37,7 @@ class baseConfig():
 
     # Image Files
     start_game_button_0 = "assets\\img\\ui\\button_unpause.bmp" 
+
     platform_top_mid        = (32, 0, 32, 32)
     platform_edge           = (128, 32, 32, 32)
     platform_top_left       = (0, 0, 32, 32)
@@ -46,7 +47,11 @@ class baseConfig():
     platform_bottom_mid     = (32, 32, 32, 32)
     platform_mid_0          = (32, 32, 32, 32)
     platform_bottom_mid_mid = (96, 32, 32, 32)
-    image_file_character_0 = "assets\\img\\game\\character_0.bmp"
+
+    image_file_character_0              = "assets\\img\\game\\character_0.bmp"
+    image_file_character_stand          = "assets\\img\\game\\player_standing.bmp"
+    spritesheet_file_character_running  = "assets\\img\\game\\player_running.bmp"
+
     image_file_enemy_0 = "assets\\img\\game\\enemy_0.bmp"
 
 class developmentConfig(baseConfig):

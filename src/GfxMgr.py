@@ -69,7 +69,7 @@ class GfxMgr():
             for particle in self.engine.entityMgr.particles:
                 particle.draw()
 
-            self.engine.entityMgr.player.draw()
+            self.engine.entityMgr.player.draw(dt)
 
         self.engine.uiMgr.tick(dt)
 

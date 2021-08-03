@@ -18,7 +18,7 @@ class EntityMgr():
     
     def initialize(self):
 
-        self.player = Player(self.engine, self.engine.config.image_file_character_0, (16, 32), 0, self.engine.gfxMgr.window, (0,0))
+        self.player = Player(self.engine, self.engine.config.image_file_character_stand, (8, 27), 0, self.engine.gfxMgr.window, (0,0), (32, 32))
         self.player.initialize()
 
         self.platforms = []
