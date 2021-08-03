@@ -179,18 +179,9 @@ class Platform(Entity):
         self.image = None
         self.pType = pType
         if self.pType != 'I':
-            # self.image_file_path = image_file_name
-            # self.image = pygame.image.load(self.image_file_path).convert()      
-            # self.size = (self.image.get_size()[0] * self.engine.config.scale, self.image.get_size()[1] * self.engine.config.scale)
-            # self.image = pygame.transform.scale(self.image, self.size)
             self.image = image_file_name
             self.size = (self.image.get_size()[0] * self.engine.config.scale, self.image.get_size()[1] * self.engine.config.scale)
             self.image = pygame.transform.scale(self.image, self.size)
-        # elif self.pType == 'L' or self.pType == 'l' or self.pType == 'R' or self.pType == 'r':
-        #     self.image = image_file_name
-        #     self.size = (self.image.get_size()[0] * self.engine.config.scale, self.image.get_size()[1] * self.engine.config.scale)
-        #     self.image = pygame.transform.scale(self.image, self.size)
-
 
     def draw(self):
         if self.in_camera() and self.pType != 'I':
