@@ -5,6 +5,7 @@
 
 # Includes
 import pygame
+from .utils.spritesheet import SpriteSheet
 
 
 # Class
@@ -17,12 +18,15 @@ class GameMgr():
         self.player_load_pos = None
         self.player_lives = 10
         self.goal = None
+
+        self.spritesheet = None
         
         self.current_level = 0
         self.max_level = 3
     
     def initialize(self):
         self.game_status = 'MENU'
+        self.spritesheet = SpriteSheet("assets\\img\\game\\spritesheet.bmp")
 
     def load_level(self, level):
 

@@ -41,28 +41,28 @@ class EntityMgr():
         self.bullets = []
         for platform in self.engine.gameMgr.platforms:
             if platform[2] == 'G':
-                image = self.engine.config.image_file_top_0
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_top_mid)
                 pType = 'G'
             elif platform[2] == 'D':
-                image = self.engine.config.image_file_mid_0
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_edge)
                 pType = 'D'
             elif platform[2] == 'L':
-                image = self.engine.config.image_file_left_0
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_top_left)
                 pType = 'L'
             elif platform[2] == 'l':
-                image = self.engine.config.image_file_left_1
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_bottom_left)
                 pType = 'l'
             elif platform[2] == 'B':
-                image = self.engine.config.image_file_bottom_0
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_bottom_mid)
                 pType = 'B'
             elif platform[2] == 'R':
-                image = self.engine.config.image_file_right_0
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_top_right)
                 pType = 'R'
             elif platform[2] == 'r':
-                image = self.engine.config.image_file_right_1
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_bottom_right)
                 pType = 'r'
             elif platform[2] == 'E':
-                image = self.engine.config.image_file_mid_1
+                image = self.engine.gameMgr.spritesheet.get_image(*self.engine.config.platform_bottom_mid_mid)
                 pType = 'E'
             elif platform[2] == 'I':
                 image = None
