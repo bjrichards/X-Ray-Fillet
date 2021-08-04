@@ -4,7 +4,7 @@
 
 
 # Includes
-import pygame
+from pygame import Surface
 from .Button import Button
 
 
@@ -69,7 +69,7 @@ class UiMgr():
             self.engine.gfxMgr.uiScreen.blit(self.engine.gfxMgr.update_player_lives_left(), (10, 100))
 
         elif self.engine.gameMgr.game_status == 'MENU':
-            transparent_background = pygame.Surface((self.engine.config.window_size[0], self.engine.config.window_size[1]))
+            transparent_background = Surface((self.engine.config.window_size[0], self.engine.config.window_size[1]))
             transparent_background = transparent_background.convert_alpha()
             transparent_background.fill((0, 0, 0, 60))
             self.engine.gfxMgr.uiScreen.blit(transparent_background, (0, 0))

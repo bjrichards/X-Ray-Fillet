@@ -4,8 +4,8 @@
 
 
 # Includes
-import sys
-import pygame
+from sys import exit
+from pygame import time
 from .GfxMgr import GfxMgr
 from .UiMgr import UiMgr
 from .EntityMgr import EntityMgr
@@ -28,7 +28,7 @@ class Engine():
 
         self.keepRunning = True
 
-        self.clock = pygame.time.Clock()
+        self.clock = time.Clock()
         self.gravity = 0
 
     def initialize(self):
@@ -58,4 +58,4 @@ class Engine():
 
     def cleanup(self):
         self.gfxMgr.shutdown()
-        sys.exit()
+        exit()  # sys.exit

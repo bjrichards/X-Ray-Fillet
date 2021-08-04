@@ -4,7 +4,9 @@
 
 
 # Includes
-import pygame
+from pygame import event,  mouse
+from pygame import QUIT, KEYDOWN, KEYUP, K_ESCAPE, K_SPACE, MOUSEBUTTONDOWN
+from pygame import K_a, K_d, K_s, K_w
 
 
 # Class
@@ -20,43 +22,43 @@ class InputMgr():
 
 
     def tick(self):
-        for event in pygame.event.get():
+        for single_event in event.get():
             # Window is 'X'ed out
-            if event.type == pygame.QUIT:
+            if single_event.type == QUIT:
                 self.engine.keepRunning = False
 
-            elif event.type == pygame.KEYDOWN:
+            elif single_event.type == KEYDOWN:
                 # Escape Key (exit game)
-                if event.key == pygame.K_ESCAPE:
+                if single_event.key == K_ESCAPE:
                         self.engine.keepRunning = False
                 if self.engine.gameMgr.game_status == 'IN_GAME':
-                    if event.key == pygame.K_SPACE or event.key == pygame.K_w:
+                    if single_event.key == K_SPACE or single_event.key == K_w:
                         self.engine.entityMgr.player.jump_()
                     
-                    elif event.key == pygame.K_a:
+                    elif single_event.key == K_a:
                         self.engine.entityMgr.player.moving_left = True
-                    elif event.key == pygame.K_d:
+                    elif single_event.key == K_d:
                         self.engine.entityMgr.player.moving_right = True
-                    elif event.key == pygame.K_s:
+                    elif single_event.key == K_s:
                         self.engine.entityMgr.player.down_button = True
 
-            elif event.type == pygame.KEYUP:
+            elif single_event.type == KEYUP:
                 if self.engine.gameMgr.game_status == 'IN_GAME':
-                    if event.key == pygame.K_a:
+                    if single_event.key == K_a:
                         self.engine.entityMgr.player.moving_left = False
-                    elif event.key == pygame.K_d:
+                    elif single_event.key == K_d:
                         self.engine.entityMgr.player.moving_right = False
-                    elif event.key == pygame.K_s:
+                    elif single_event.key == K_s:
                         self.engine.entityMgr.player.down_button = False
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif single_event.type == MOUSEBUTTONDOWN:
                 if self.engine.gameMgr.game_status == 'IN_GAME':
-                    if event.button == 1:
-                        self.engine.entityMgr.player.fire(pygame.mouse.get_pos())
+                    if single_event.button == 1:
+                        self.engine.entityMgr.player.fire(mouse.get_pos())
                 elif self.engine.gameMgr.game_status == 'MENU':
-                    if event.button == 1:
+                    if single_event.button == 1:
                         for button in self.engine.uiMgr.main_menu_buttons:
-                            if button.is_clicked(pygame.mouse.get_pos()):
+                            if button.is_clicked(mouse.get_pos()):
                                 if button.button_id == 'START':
                                     self.engine.gameMgr.game_status = 'START'
                                     break

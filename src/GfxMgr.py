@@ -4,7 +4,9 @@
 
 
 # Includes
-import pygame
+from pygame import Color, display, font, Surface
+from pygame import init, quit
+from pygame import SRCALPHA
 
 
 # Class
@@ -26,14 +28,14 @@ class GfxMgr():
 
     
     def initialize(self, name, size):
-        pygame.init()
-        pygame.display.set_caption(name)
+        init() # pygame.init()
+        display.set_caption(name) # pygame.display
         
-        self.screen = pygame.display.set_mode(size)
-        self.window = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
-        self.uiScreen = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        self.screen = display.set_mode(size)
+        self.window = Surface(self.screen.get_size(), SRCALPHA)
+        self.uiScreen = Surface(self.screen.get_size(), SRCALPHA)
 
-        self.font = pygame.font.SysFont("Arial", 18)
+        self.font = font.SysFont("Arial", 18)
 
 
     def tick(self, dt):
@@ -76,57 +78,57 @@ class GfxMgr():
         self.screen.blit(self.window, self.window_pos)
         self.screen.blit(self.uiScreen, (0,0))
 
-        pygame.display.update()
+        display.update()
 
     def shutdown(self):
-        pygame.quit()
+        quit() # pygame.quit
 
 
     def update_fps(self):
         fps = str(int(self.engine.clock.get_fps()))
-        result = self.font.render("FPS Count: " + fps, 1, pygame.Color("coral"))
+        result = self.font.render("FPS Count: " + fps, 1, Color("coral"))
         return result
 
     def update_is_grounded(self):
         col = str(self.engine.entityMgr.player.is_grounded)
-        result = self.font.render("Is Grounded: " + col, 1, pygame.Color("coral"))
+        result = self.font.render("Is Grounded: " + col, 1, Color("coral"))
         return result
 
     def update_show_jumps(self):
         jumps = str(2 - self.engine.entityMgr.player.jump)
-        result = self.font.render("Jumps Left: " + jumps, 1, pygame.Color("coral"))
+        result = self.font.render("Jumps Left: " + jumps, 1, Color("coral"))
         return result
 
 
     def update_bullet_count(self):
         bc = str(len(self.engine.entityMgr.bullets))
-        result = self.font.render("Bullet Count: " + bc, 1, pygame.Color("coral"))
+        result = self.font.render("Bullet Count: " + bc, 1, Color("coral"))
         return result
 
 
     def update_platforms_rendered(self):
         pr = str(self.platforms_rendered)
-        result = self.font.render("Platforms Rendered: " + pr, 1, pygame.Color("coral"))
+        result = self.font.render("Platforms Rendered: " + pr, 1, Color("coral"))
         return result
 
 
     def update_enemy_count(self):
         pr = str(len(self.engine.entityMgr.enemies))
-        result = self.font.render("Enemy Count: " + pr, 1, pygame.Color("coral"))
+        result = self.font.render("Enemy Count: " + pr, 1, Color("coral"))
         return result
 
 
     def update_enemy_rendered_count(self):
         pr = str(self.enemies_rendered)
-        result = self.font.render("Enemies Rendered: " + pr, 1, pygame.Color("coral"))
+        result = self.font.render("Enemies Rendered: " + pr, 1, Color("coral"))
         return result
 
     def update_player_lives_left(self):
         pr = str(self.engine.gameMgr.player_lives)
-        result = self.font.render("Player Lives: " + pr, 1, pygame.Color("coral"))
+        result = self.font.render("Player Lives: " + pr, 1, Color("coral"))
         return result
 
     def update_game_status(self):
         pr = str(self.engine.gameMgr.game_status)
-        result = self.font.render("Game Status: " + pr, 1, pygame.Color("coral"))
+        result = self.font.render("Game Status: " + pr, 1, Color("coral"))
         return result

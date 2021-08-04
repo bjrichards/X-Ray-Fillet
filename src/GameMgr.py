@@ -4,7 +4,6 @@
 
 
 # Includes
-import pygame
 from .utils.spritesheet import SpriteSheet
 
 

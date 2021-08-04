@@ -4,8 +4,9 @@
 
 
 # Includes
-import pygame
-from .Entity import Player, Platform, Enemy
+from .Entities.Enemy import Enemy
+from .Entities.Player import Player
+from .Entities.Platform import Platform
 
 
 # Class

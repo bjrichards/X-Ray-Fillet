@@ -6,7 +6,7 @@
 ############
 # Includes #
 ############
-import pygame   # For image loading, blitting
+from pygame import image, transform
 
 
 # Class
@@ -67,9 +67,9 @@ class Button():
         self.surface = surface
         self.position = position
 
-        self.image = pygame.image.load(image_file_name).convert()
+        self.image = image.load(image_file_name).convert()
         self.image.set_colorkey((255, 255, 255))
-        self.image = pygame.transform.scale(self.image, self.size)
+        self.image = transform.scale(self.image, self.size)
 
         self.image_rect = self.image.get_rect()
     
