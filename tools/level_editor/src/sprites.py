@@ -25,7 +25,7 @@ class Sprite(Entity):
     def draw(self, dt):
         self.display_surface.blit(self.image, self.position)
         if self.selected:
-            draw.rect(self.display_surface, self.color, self.rect)
+            draw.rect(self.display_surface, self.color, self.rect, 3)
 
     def is_clicked(self, mouse_position):
         result = False
