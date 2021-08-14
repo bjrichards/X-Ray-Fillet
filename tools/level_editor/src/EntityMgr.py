@@ -4,7 +4,7 @@
 
 
 # Includes
-from TileType import TileType
+from .sprites import Sprite
 
 
 # Class
@@ -17,6 +17,8 @@ class EntityMgr():
     
     def initialize(self):        
         self.tile_types = []
+        self.sprites = []
+        self.layer_0_placed_sprites = []
 
     def load_map(self):
         pass

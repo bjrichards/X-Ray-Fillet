@@ -3,6 +3,7 @@
 
 # IMPORTS #
 
+from src.EntityMgr import EntityMgr
 from src.AppMgr import AppMgr
 from src.GfxMgr import GfxMgr
 from src.InputMgr import InputMgr
@@ -17,6 +18,7 @@ class Engine():
         self.map_file = map_file
 
         self.gfx_mgr = GfxMgr(self)
+        self.entity_mgr = EntityMgr(self)
         self.app_mgr = AppMgr(self)
         self.input_mgr = InputMgr(self)
 
@@ -28,6 +30,7 @@ class Engine():
 
     def initialize(self):
         self.gfx_mgr.initialize(self.config.window_name, self.config.window_size)
+        self.entity_mgr.initialize()
         self.app_mgr.initialize()
         self.input_mgr.initialize()
 
@@ -52,7 +55,7 @@ class Engine():
     def save_file(self):
         # create dict
         temp_dict = {}
-        for sprite in self.app_mgr.placed_sprites:
+        for sprite in self.entity_mgr.layer_0_placed_sprites:
             temp_dict[sprite.identity] = [sprite.entity_type, sprite.position]
         # jsonify
         fo = open('data/maps/' + self.map_file, "w")

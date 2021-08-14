@@ -6,6 +6,8 @@ class baseConfig():
 
     sources = [
         [
+            "Spritesheet_0",
+            "Tile",
             "data\\spritesheet_0\\spritesheet.bmp",
             "data\\spritesheet_0\\data.json"
         ]

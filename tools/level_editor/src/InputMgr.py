@@ -27,7 +27,7 @@ class InputMgr():
                     if single_event.button == 1:
                         # print(self.engine.gfx_mgr.select_window.get_size())
                         if mouse.get_pos()[0] < self.engine.gfx_mgr.select_window.get_size()[0]:
-                            for sprite in self.engine.app_mgr.sprites:
+                            for sprite in self.engine.entity_mgr.sprites:
                                 if sprite.is_clicked(mouse.get_pos()):
                                     if self.engine.app_mgr.selected_sprite != None:
                                         self.engine.app_mgr.selected_sprite.selected = False

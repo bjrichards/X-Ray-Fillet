@@ -12,6 +12,9 @@ class Sprite(Entity):
         
         self.entity_type = "tile"
 
+        self.source_name = None
+        self.source_type = None
+
         self.image_size = (image_size[0] * self.engine.config.scale, image_size[1] * self.engine.config.scale)
         
         self.color = (255, 255, 255)

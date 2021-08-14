@@ -39,10 +39,10 @@ class GfxMgr():
         self.window.fill((0,0,0))
         self.select_window.fill((150, 150, 150))
 
-        for sprite in self.engine.app_mgr.sprites:
+        for sprite in self.engine.entity_mgr.sprites:
             sprite.draw(dt)
         
-        for sprite in self.engine.app_mgr.placed_sprites:
+        for sprite in self.engine.entity_mgr.layer_0_placed_sprites:
             sprite.draw(dt)
 
         self.screen.blit(self.window, self.window_pos)
