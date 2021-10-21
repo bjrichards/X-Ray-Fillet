@@ -20,6 +20,9 @@ class GfxMgr():
         self.window_pos     = (0,0)
         self.select_pos     = (0,0)
         
+        self.scroll         = [0,0]
+
+        self.camera_speed   = 0.8
     
     def initialize(self, name, size):
         init() # pygame.init()
@@ -37,18 +40,28 @@ class GfxMgr():
 
     
     def tick(self, dt):
+        if self.engine.app_mgr.moving_right:
+            self.scroll[0] += self.camera_speed * dt
+        elif self.engine.app_mgr.moving_left:
+            self.scroll[0] -= self.camera_speed * dt
+
+        if self.engine.app_mgr.moving_up:
+            self.scroll[1] -= self.camera_speed * dt
+        elif self.engine.app_mgr.moving_down:
+            self.scroll[1] += self.camera_speed * dt
+
         self.screen.fill((0,0,0,0))
         self.window.fill((0,0,0))
         self.select_window.fill((150, 150, 150))
 
         for sprite in self.engine.entity_mgr.sprites:
-            sprite.draw(dt)
+            sprite.draw(dt, False)
         
         for sprite in self.engine.entity_mgr.layer_0_placed_sprites:
-            sprite.draw(dt)
+            sprite.draw(dt, True)
 
         for sprite in self.engine.entity_mgr.layer_1_placed_sprites:
-            sprite.draw(dt)
+            sprite.draw(dt, True)
 
         self.screen.blit(self.window, self.window_pos)
         self.screen.blit(self.select_window, self.select_pos)

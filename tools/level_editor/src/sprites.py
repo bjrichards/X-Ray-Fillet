@@ -25,10 +25,19 @@ class Sprite(Entity):
 
         self.selected = False
 
-    def draw(self, dt):
-        self.display_surface.blit(self.image, self.position)
-        if self.selected:
-            draw.rect(self.display_surface, self.color, self.rect, 3)
+    def draw(self, dt, is_placed):
+        if is_placed:
+            if self.in_camera():
+                scroll = self.engine.gfx_mgr.scroll
+                position = (self.position[0] - scroll[0], self.position[1] - scroll[1])
+                self.display_surface.blit(self.image, position)
+                # self.display_surface.blit(self.image, self.position)
+        else:                
+            scroll = [0, 0]
+            position = self.position
+            self.display_surface.blit(self.image, position)
+            if self.selected:
+                draw.rect(self.display_surface, self.color, self.rect, 3)
 
     def is_clicked(self, mouse_position):
         result = False
@@ -36,4 +45,13 @@ class Sprite(Entity):
             if mouse_position[1] > self.position[1] and mouse_position[1] < self.position[1] + 64:
                 result = True
         
+        return result
+
+    def in_camera(self):
+        result = False
+        
+        if self.position[0] <= self.engine.config.window_size[0] + self.engine.gfx_mgr.scroll[0] and self.position[0] + self.size[0] >= self.engine.gfx_mgr.scroll[0]:
+            if self.position[1] <= self.engine.config.window_size[1] + self.engine.gfx_mgr.scroll[1] and self.position[1] + self.size[1] >= self.engine.gfx_mgr.scroll[1]:
+                result = True
+
         return result

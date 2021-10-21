@@ -22,8 +22,17 @@ class AppMgr():
         self.asset = {}
 
         self.selected_sprite = None
+
+        self.moving_right = None
+        self.moving_left = None
+        self.moving_up = None
+        self.moving_down = None
     
     def initialize(self):
+        self.moving_right = False
+        self.moving_left = False
+        self.moving_up = False
+        self.moving_down = False
         self.app_status = "MAIN"
         self.selected_layer = 1
         
@@ -111,13 +120,13 @@ class AppMgr():
                 search_layer = self.engine.entity_mgr.layer_0_placed_sprites
             else:
                 search_layer = self.engine.entity_mgr.layer_1_placed_sprites
-            placed_sprites[:] = [sprite for sprite in search_layer if (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+            placed_sprites[:] = [sprite for sprite in search_layer if (sprite.is_clicked((mouse_cleaned[0] + self.engine.gfx_mgr.scroll[0], mouse_cleaned[1] + self.engine.gfx_mgr.scroll[1])))]
 
             if len(placed_sprites) == 0:
 
                 # Find which tile mouse click is in
-                mouse_cleaned_grid = (floor(mouse_cleaned[0] / 64), floor(mouse_cleaned[1] / 64))
-
+                mouse_cleaned_grid = (floor((mouse_cleaned[0] + self.engine.gfx_mgr.scroll[0]) / 64), floor((mouse_cleaned[1] + self.engine.gfx_mgr.scroll[1]) / 64))
+                
                 new_sprite = Sprite(self.engine, self.selected_sprite.image, self.selected_sprite.size,
                                 self.uid, self.engine.gfx_mgr.window, 
                                     (mouse_cleaned_grid[0] * 64, mouse_cleaned_grid[1] * 64), (64, 64))
@@ -138,7 +147,7 @@ class AppMgr():
 
         # Remove block from list if exists
         if self.selected_layer == 0:
-            self.engine.entity_mgr.layer_0_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_0_placed_sprites if not (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+            self.engine.entity_mgr.layer_0_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_0_placed_sprites if not (sprite.is_clicked(((mouse_cleaned[0] + self.engine.gfx_mgr.scroll[0]), (mouse_cleaned[1] + self.engine.gfx_mgr.scroll[1]))))]
         else:
-            self.engine.entity_mgr.layer_1_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_1_placed_sprites if not (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+            self.engine.entity_mgr.layer_1_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_1_placed_sprites if not (sprite.is_clicked(((mouse_cleaned[0] + self.engine.gfx_mgr.scroll[0]), (mouse_cleaned[1] + self.engine.gfx_mgr.scroll[1]))))]
         

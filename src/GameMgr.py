@@ -61,12 +61,12 @@ class GameMgr():
             self.load_level(1)
         elif self.player_lives == 0:
             self.load_level(self.current_level)
-        # elif len(self.engine.entityMgr.enemies) == 0:
-        #     if self.current_level + 1 <= self.max_level:
-        #         self.load_level(self.current_level + 1)
-        #     else:
-        #         self.game_status = 'MENU'
-        #         self.current_level = 0
+        elif len(self.engine.entityMgr.enemies) == 0:
+            if self.current_level + 1 <= self.max_level:
+                self.load_level(self.current_level + 1)
+            else:
+                self.game_status = 'MENU'
+                self.current_level = 0
 
 
     def shutdown(self):
@@ -85,6 +85,13 @@ class GameMgr():
 
 
     def create_active_map_reconstructed(self, level):
+        self.platforms_layer_0 = []
+        self.platforms_layer_1 = []
+
+        self.engine.entityMgr.platforms_layer_0 = []
+        self.engine.entityMgr.platforms_layer_1 = []
+        self.engine.entityMgr.particles = []
+        self.engine.entityMgr.bullets = []
         # Load all the sprites
         index_y = 10
         index_x = 0

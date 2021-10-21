@@ -3,7 +3,8 @@
 
 # INCLUDES #
 from pygame import event, mouse
-from pygame import QUIT, KEYDOWN, K_ESCAPE, K_0, K_1, MOUSEBUTTONDOWN
+from pygame import QUIT, KEYDOWN, KEYUP, K_ESCAPE, K_0, K_1, MOUSEBUTTONDOWN
+from pygame.constants import K_d, K_a, K_w, K_s
 
 
 # Class
@@ -30,6 +31,27 @@ class InputMgr():
                     self.engine.app_mgr.selected_layer = 0
                 elif single_event.key == K_1:
                     self.engine.app_mgr.selected_layer = 1
+                
+                # Movement of camera
+                elif single_event.key == K_d:
+                    self.engine.app_mgr.moving_right = True
+                elif single_event.key == K_a:
+                    self.engine.app_mgr.moving_left = True
+                elif single_event.key == K_w:
+                    self.engine.app_mgr.moving_up = True
+                elif single_event.key == K_s:
+                    self.engine.app_mgr.moving_down = True
+
+            # Key Ups
+            elif single_event.type == KEYUP:
+                if single_event.key == K_d:
+                    self.engine.app_mgr.moving_right = False
+                elif single_event.key == K_a:
+                    self.engine.app_mgr.moving_left = False
+                elif single_event.key == K_w:
+                    self.engine.app_mgr.moving_up = False
+                elif single_event.key == K_s:
+                    self.engine.app_mgr.moving_down = False
 
             # Mouse downs
             elif single_event.type == MOUSEBUTTONDOWN:
