@@ -3,7 +3,7 @@
 
 # INCLUDES #
 from pygame import event, mouse
-from pygame import QUIT, KEYDOWN, K_ESCAPE, MOUSEBUTTONDOWN
+from pygame import QUIT, KEYDOWN, K_ESCAPE, K_0, K_1, MOUSEBUTTONDOWN
 
 
 # Class
@@ -18,10 +18,20 @@ class InputMgr():
         for single_event in event.get():
             if single_event.type == QUIT:
                 self.engine.keep_running = False
+            
+            # Key downs
             elif single_event.type == KEYDOWN:
                 # Escape Key (exit game)
                 if single_event.key == K_ESCAPE:
                     self.engine.keep_running = False
+
+                # Changing selected layer
+                elif single_event.key == K_0:
+                    self.engine.app_mgr.selected_layer = 0
+                elif single_event.key == K_1:
+                    self.engine.app_mgr.selected_layer = 1
+
+            # Mouse downs
             elif single_event.type == MOUSEBUTTONDOWN:
                 if self.engine.app_mgr.app_status == 'MAIN':
                     if single_event.button == 1:

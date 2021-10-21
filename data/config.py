@@ -1,7 +1,8 @@
 class baseConfig():
     window_size = (1920, 1080)
     window_name = "DEV X-Ray Fillet"
-    scale       = 2
+    scale       = 1
+    scale_player = 2
     fps         = 800
 
     # UI Debugging Options
@@ -48,10 +49,32 @@ class baseConfig():
     platform_bottom_mid_mid = (96, 32, 32, 32)
 
     image_file_character_0              = "assets\\img\\game\\character_0.bmp"
-    image_file_character_stand          = "assets\\img\\game\\player_standing.bmp"
+    image_file_character_stand          = "assets\img\game\player_0\player_standing.bmp"
     spritesheet_file_character_running  = "assets\\img\\game\\player_running.bmp"
 
     image_file_enemy_0 = "assets\\img\\game\\enemy_0.bmp"
+
+
+    sources = [
+        [
+            "Spritesheet_0",
+            "Tile",
+            "assets\\img\\game\\spritesheet_0\\spritesheet.bmp",
+            "assets\\img\\game\\spritesheet_0\\data.json"
+        ],
+        [
+            "Character_Image",
+            "Resource",
+            "assets\\img\\game\\player_0\\player_standing.bmp",
+            "assets\\img\\game\\player_0\\data.json"
+        ],
+        [
+            "Enemy_Image",
+            "Resource",
+            "assets\\img\\game\\enemy_0\\enemy_0.bmp",
+            "assets\\img\\game\\enemy_0\\data.json"
+        ]
+    ]
 
 class developmentConfig(baseConfig):
     window_name = "DEV X-Ray Fillet Engine"

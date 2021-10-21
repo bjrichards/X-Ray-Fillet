@@ -14,8 +14,6 @@ class InputMgr():
     def __init__(self, engine):
         self.engine = engine
 
-        pass
-
     
     def initialize(self):
         pass

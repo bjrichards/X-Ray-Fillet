@@ -46,7 +46,7 @@ class Bullet(Entity):
         if self.time_alive / 1000 < self.lifetime_max:
             result = True
 
-        for platform in self.engine.entityMgr.platforms:
+        for platform in self.engine.entityMgr.platforms_layer_1:
             if platform.pType != 'I':
                 pos = self.position
                 size = self.size
@@ -90,8 +90,6 @@ class Bullet(Entity):
         ry = entity.position[1]
         rw = entity.size[0]
         rh = entity.size[1]
-
-        collision = False
         
         testx = cx
         testy = cy

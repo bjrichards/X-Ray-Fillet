@@ -16,8 +16,10 @@ class Player(Entity):
         
         self.entity_type = "Player"
 
-        self.image_size = (image_size[0] * self.engine.config.scale, image_size[1] * self.engine.config.scale)
+        self.image_size = (image_size[0] * self.engine.config.scale_player, image_size[1] * self.engine.config.scale_player)
         
+        self.size = (size[0] * self.engine.config.scale_player, size[1] * self.engine.config.scale_player)
+
         self.color = (255, 255, 255)
         self.bullet_color = self.engine.config.player_bullet_color
         self.position = position
@@ -26,7 +28,7 @@ class Player(Entity):
         self.block_exlusion = 'I'
 
         self.image_file_path = image_file_name       
-        self.image = image.load(self.image_file_path).convert()
+        self.image = image_file_name
         self.image.set_colorkey((0, 0, 0))        
         self.image = transform.scale(self.image, self.image_size)
 
@@ -70,8 +72,8 @@ class Player(Entity):
 
     def draw(self, dt):
         scroll = self.engine.gfxMgr.scroll
-        v_offset = ((32 - (self.size[1] / self.engine.config.scale)) * self.engine.config.scale)
-        h_offset = (self.image_size[0] / self.engine.config.scale) - (self.size[0] / self.engine.config.scale)
+        v_offset = ((32 - (self.size[1] / self.engine.config.scale_player)) * self.engine.config.scale_player)
+        h_offset = (self.image_size[0] / self.engine.config.scale_player) - (self.size[0] / self.engine.config.scale_player)
         position = (self.position[0] - scroll[0] - h_offset, self.position[1] - scroll[1] - v_offset)
 
         self.choose_display_image(dt)
@@ -83,10 +85,6 @@ class Player(Entity):
             draw.rect(self.display_surface, self.color, self.rect)
 
     def check_collisions(self):
-        # if self.keep_in_screen():
-        #     self.is_grounded = True
-        #     self.double_jumped = False
-        #     self.jump = 0
         if self.check_platform_collisions():
             self.jump = 0
         else:

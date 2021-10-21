@@ -19,6 +19,7 @@ class EntityMgr():
         self.tile_types = []
         self.sprites = []
         self.layer_0_placed_sprites = []
+        self.layer_1_placed_sprites = []
 
     def load_map(self):
         pass

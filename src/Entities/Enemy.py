@@ -1,7 +1,7 @@
 # IMPORTS #
 
 # Libraries #
-from pygame import Rect, image, transform
+from pygame import Rect, image, transform, draw
 from math import sqrt
 from random import randrange
 
@@ -21,11 +21,13 @@ class Enemy (Entity):
         
         self.color = (255, 0, 0)
         self.bullet_color = self.engine.config.enemy_bullet_color
+        self.size = (size[0] * self.engine.config.scale_player, size[1] * self.engine.config.scale_player)
         self.rect = Rect(self.position[0], self.position[1], self.size[0], self.size[1])
+        
     
-        self.image_file_path = image_file_name
-        self.image = image.load(self.image_file_path).convert()        
-        self.image = transform.scale(self.image, self.size)
+        # self.image_file_path = image_file_name
+        self.image = image_file_name #image.load(self.image_file_path).convert()        
+  #      self.image = transform.scale(self.image, self.size)
 
         self.aspects.append(Physics2D(self))
 
@@ -42,9 +44,15 @@ class Enemy (Entity):
         self.down_button = False
 
         self.bullet_speed = self.engine.config.enemy_bullet_speed
+        self.fire_rate = 1
+
+        self.last_fired = 0
+
 
     def tick(self, dt):
         
+        self.last_fired = self.last_fired + self.engine.clock.get_time()
+
         if self.in_camera():
             if self.engine.entityMgr.player.position[0] + 100 < self.position[0]:
                 self.moving_right = False
@@ -61,9 +69,10 @@ class Enemy (Entity):
             
             self.check_enemy_collisions()
 
-            if self.engine.config.enemies_can_fire and self.in_camera():
-                if randrange(1, 100, 1) > 98:
-                    self.fire(self.engine.entityMgr.player.position)
+            if self.last_fired / 1000 > self.fire_rate and self.engine.config.enemies_can_fire and self.in_camera():
+                # if randrange(1, 100, 1) > 98:
+                self.fire(self.engine.entityMgr.player.position)
+                self.last_fired = 0
             # posx = self.position[0] + self.velocity[0] * dt
             # posy = self.position[1] + self.velocity[1] * dt
 
@@ -77,8 +86,9 @@ class Enemy (Entity):
             self.display_surface.blit(self.image, position)
             
             if self.engine.config.bounding_boxes:
+                print(self.position, scroll)
                 self.rect = Rect(self.position[0] - scroll[0], self.position[1] - scroll[1], self.size[0], self.size[1])
-
+                draw.rect(self.display_surface, self.color, self.rect)
             self.engine.gfxMgr.enemies_rendered += 1
 
     def check_collisions(self):

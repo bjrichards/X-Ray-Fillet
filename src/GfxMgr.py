@@ -58,7 +58,9 @@ class GfxMgr():
 
 
             self.platforms_rendered = 0
-            for platform in self.engine.entityMgr.platforms:
+            for platform in self.engine.entityMgr.platforms_layer_0:
+                platform.draw()
+            for platform in self.engine.entityMgr.platforms_layer_1:
                 platform.draw()
 
             self.enemies_rendered = 0

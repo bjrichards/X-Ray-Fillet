@@ -4,7 +4,7 @@
 # INCLUDES #
 from pygame import display, Surface
 from pygame import init, quit
-from pygame import SRCALPHA
+from pygame import SRCALPHA, Color, font
 
 
 # Class
@@ -33,6 +33,8 @@ class GfxMgr():
         self.window_pos = (self.window_pos[0] + self.screen_size[0] / 5, self.window_pos[1])
         self.select_window = Surface((self.screen_size[0] / 5, self.screen_size[1]), SRCALPHA)
 
+        self.font = font.SysFont("Arial", 18)
+
     
     def tick(self, dt):
         self.screen.fill((0,0,0,0))
@@ -45,10 +47,21 @@ class GfxMgr():
         for sprite in self.engine.entity_mgr.layer_0_placed_sprites:
             sprite.draw(dt)
 
+        for sprite in self.engine.entity_mgr.layer_1_placed_sprites:
+            sprite.draw(dt)
+
         self.screen.blit(self.window, self.window_pos)
         self.screen.blit(self.select_window, self.select_pos)
+
+        self.screen.blit(self.update_game_layer(), (900, 0))
 
         display.update()
 
     def shutdown(self):
         quit() # pygame.quit
+
+
+    def update_game_layer(self):
+        layer = str(self.engine.app_mgr.selected_layer)
+        result = self.font.render("Game Status: " + layer, 1, Color("coral"))
+        return result

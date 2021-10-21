@@ -52,7 +52,7 @@ class Physics2D(Aspect):
 
         # First check for any horizontal collisions
         next_xpos = self.entity.position[0] + velx * dt
-        for platform in self.entity.engine.entityMgr.platforms:
+        for platform in self.entity.engine.entityMgr.platforms_layer_1:
             if not check_all and not platform.in_camera():
                 pass
             elif platform.pType != self.entity.block_exlusion: 
@@ -67,7 +67,7 @@ class Physics2D(Aspect):
 
         # Now check for any vertical collisions
         next_ypos = self.entity.position[1] + vely * dt
-        for platform in self.entity.engine.entityMgr.platforms:
+        for platform in self.entity.engine.entityMgr.platforms_layer_1:
             if not check_all and not platform.in_camera():
                 pass
             elif platform.pType != self.entity.block_exlusion: 

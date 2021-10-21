@@ -17,6 +17,7 @@ class AppMgr():
         self.engine = engine
         self.app_status = None
         self.uid = 0
+        self.selected_layer = None
 
         self.asset = {}
 
@@ -24,7 +25,11 @@ class AppMgr():
     
     def initialize(self):
         self.app_status = "MAIN"
+        self.selected_layer = 1
         
+        # Load all the sprites
+        index_y = 10
+        index_x = 0
         for file in self.engine.config.sources:
             # Load source name
             source_name = file[0]
@@ -37,14 +42,15 @@ class AppMgr():
 
             # Load each position of sprite
             f = open(file[3],)
-            self.data = json.load(f)
+            print(file[3])
+            data = json.load(f)
             f.close()
-            self.asset.update(self.data['positions'])
+            self.asset = {}
+            self.asset.update(data['positions'])
 
-            # Load the tiles from spritesheet into sprites array
-            index_y = 10
-            index_x = 0
+            index = 0
             for id in self.asset:
+                index += 1
                 position = self.asset[id]
                 new_image = self.spritesheet.get_image(position[0], position[1], position[2], position[3])
                 new_image.set_colorkey( (0, 0, 0) )
@@ -62,21 +68,28 @@ class AppMgr():
                     index_x = 0
                     index_y += 70
 
-            # Load file if exists
-            if path.exists('data\\maps\\' + self.engine.map_file):
-                fi = open('data/maps/' + self.engine.map_file)
-                temp_dict = json.load(fi)
-                for id in temp_dict:
-                    entity_type = temp_dict[id][0]
-                    position = temp_dict[id][1]
-                    sprite = []
-                    sprite[:] = [sprite_t for sprite_t in self.engine.entity_mgr.sprites if entity_type == sprite_t.entity_type]
-                    temp_placed_sprite = Sprite(self.engine, sprite[0].image, sprite[0].size, self.uid,
-                                            self.engine.gfx_mgr.window, position, (32, 32))
-                    temp_placed_sprite.entity_type = sprite[0].entity_type
-                    self.uid += 1
+        # Load file if exists
+        if path.exists('data\\maps\\' + self.engine.map_file):
+            fi = open('data/maps/' + self.engine.map_file)
+            temp_dict = json.load(fi)
+            for id in temp_dict:
+                source = temp_dict[id][0]
+                entity_type = temp_dict[id][1]
+                position = temp_dict[id][2]
+                layer = temp_dict[id][3]
+                sprite = []
+                sprite[:] = [sprite_t for sprite_t in self.engine.entity_mgr.sprites if (entity_type == sprite_t.entity_type and source == sprite_t.source_name)]
+
+                temp_placed_sprite = Sprite(self.engine, sprite[0].image, sprite[0].size, self.uid,
+                                        self.engine.gfx_mgr.window, position, (32, 32))
+                temp_placed_sprite.entity_type = sprite[0].entity_type
+                temp_placed_sprite.source_name = sprite[0].source_name
+                temp_placed_sprite.source_type = sprite[0].source_type
+                self.uid += 1
+                if layer == 0:
                     self.engine.entity_mgr.layer_0_placed_sprites.append(temp_placed_sprite)
-    
+                else:
+                    self.engine.entity_mgr.layer_1_placed_sprites.append(temp_placed_sprite)
 
     def tick(self, dt):
         if self.app_status == "MAIN":
@@ -94,7 +107,11 @@ class AppMgr():
 
             # Make sure no sprite is there currently before placing
             placed_sprites = []
-            placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_0_placed_sprites if (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+            if self.selected_layer == 0:
+                search_layer = self.engine.entity_mgr.layer_0_placed_sprites
+            else:
+                search_layer = self.engine.entity_mgr.layer_1_placed_sprites
+            placed_sprites[:] = [sprite for sprite in search_layer if (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
 
             if len(placed_sprites) == 0:
 
@@ -105,7 +122,12 @@ class AppMgr():
                                 self.uid, self.engine.gfx_mgr.window, 
                                     (mouse_cleaned_grid[0] * 64, mouse_cleaned_grid[1] * 64), (64, 64))
                 new_sprite.entity_type = self.selected_sprite.entity_type
-                self.engine.entity_mgr.layer_0_placed_sprites.append(new_sprite)
+                new_sprite.source_name = self.selected_sprite.source_name
+                new_sprite.source_type = self.selected_sprite.source_type
+                if self.selected_layer == 0:
+                    self.engine.entity_mgr.layer_0_placed_sprites.append(new_sprite)
+                else:
+                    self.engine.entity_mgr.layer_1_placed_sprites.append(new_sprite)
                 self.uid += 1
         else:
             print("No Sprite Selected")
@@ -115,4 +137,8 @@ class AppMgr():
         mouse_cleaned = (mouse_pos[0] - self.engine.gfx_mgr.select_window.get_size()[0], mouse_pos[1])
 
         # Remove block from list if exists
-        self.engine.entity_mgr.layer_0_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_0_placed_sprites if not (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+        if self.selected_layer == 0:
+            self.engine.entity_mgr.layer_0_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_0_placed_sprites if not (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+        else:
+            self.engine.entity_mgr.layer_1_placed_sprites[:] = [sprite for sprite in self.engine.entity_mgr.layer_1_placed_sprites if not (sprite.is_clicked((mouse_cleaned[0], mouse_cleaned[1])))]
+        

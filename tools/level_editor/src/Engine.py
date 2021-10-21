@@ -56,7 +56,10 @@ class Engine():
         # create dict
         temp_dict = {}
         for sprite in self.entity_mgr.layer_0_placed_sprites:
-            temp_dict[sprite.identity] = [sprite.entity_type, sprite.position]
+            temp_dict[sprite.identity] = [sprite.source_name, sprite.entity_type, sprite.position, 0]
+
+        for sprite in self.entity_mgr.layer_1_placed_sprites:
+            temp_dict[sprite.identity] = [sprite.source_name, sprite.entity_type, sprite.position, 1]
         # jsonify
         fo = open('data/maps/' + self.map_file, "w")
         fo.write(dumps(temp_dict))

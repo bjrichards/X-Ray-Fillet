@@ -17,7 +17,7 @@ class Platform(Entity):
         self.pType = pType
         if self.pType != 'I':
             self.image = image_file_name
-            self.size = (self.image.get_size()[0] * self.engine.config.scale, self.image.get_size()[1] * self.engine.config.scale)
+            self.size = (self.image.get_size()[0], self.image.get_size()[1])
             self.image = transform.scale(self.image, self.size)
 
     def draw(self):
